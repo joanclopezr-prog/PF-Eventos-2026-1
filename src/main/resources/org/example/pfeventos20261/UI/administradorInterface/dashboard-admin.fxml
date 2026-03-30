@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #f8f9fa;">
+
+    <left>
+        <VBox spacing="10" prefWidth="250" style="-fx-background-color: #1a252f;">
+            <padding>
+                <Insets top="20" left="15" right="15" bottom="20"/>
+            </padding>
+
+            <VBox alignment="CENTER" spacing="10">
+                <Text text="ADMIN PANEL" style="-fx-fill: #3498db; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                <Text text="Operaciones Eventify" style="-fx-fill: #bdc3c7; -fx-font-size: 12;"/>
+                <Separator opacity="0.2" prefWidth="200"/>
+            </VBox>
+
+            <Label text="GESTIÓN DE CATÁLOGO" textFill="#7f8c8d" style="-fx-font-size: 10; -fx-font-weight: bold;">
+                <padding><Insets top="15"/></padding>
+            </Label>
+
+            <Button fx:id="btnGestionEventos" text="Eventos" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;"/>
+
+            <Button fx:id="btnGestionRecintos" text="Recintos y Zonas" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;"/>
+
+            <Button fx:id="btnGestionAsientos" text="Mapa de Asientos" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;"/>
+
+            <Label text="OPERACIONES" textFill="#7f8c8d" style="-fx-font-size: 10; -fx-font-weight: bold;">
+                <padding><Insets top="15"/></padding>
+            </Label>
+
+            <Button fx:id="btnGestionUsuarios" text="Usuarios" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;"/>
+
+            <Button fx:id="btnControlCompras" text="Compras y Pagos" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;"/>
+
+            <Button fx:id="btnIncidencias" text="Incidencias" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;"/>
+
+            <Label text="ANALÍTICA" textFill="#7f8c8d" style="-fx-font-size: 10; -fx-font-weight: bold;">
+                <padding><Insets top="15"/></padding>
+            </Label>
+
+            <Button fx:id="btnMetricas" text="📈 Panel de Métricas" maxWidth="Infinity" alignment="BASELINE_LEFT"
+                    style="-fx-background-color: #34495e; -fx-text-fill: #3498db; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Button fx:id="btnCerrarSesionAdmin" text="Cerrar Sesión" maxWidth="Infinity"
+                    style="-fx-background-color: #c0392b; -fx-text-fill: white;"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="60" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);">
+                <padding><Insets right="30"/></padding>
+                <HBox spacing="15" alignment="CENTER">
+                    <VBox alignment="CENTER_RIGHT">
+                        <Text text="Admin Master" style="-fx-font-weight: bold;"/>
+                        <Text text="Modo Dios" style="-fx-font-size: 10; -fx-fill: #7f8c8d;"/>
+                    </VBox>
+                    <Circle radius="18" fill="#3498db"/>
+                </HBox>
+            </HBox>
+
+            <StackPane fx:id="contentAreaAdmin" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="25" left="25" right="25" bottom="25"/>
+                </padding>
+                <VBox alignment="CENTER" spacing="10">
+                    <Text text="Panel de Control Principal" style="-fx-font-size: 20; -fx-fill: #95a5a6;"/>
+                    <Text text="Seleccione una categoría a la izquierda para gestionar el sistema." style="-fx-fill: #bdc3c7;"/>
+                </VBox>
+            </StackPane>
+        </VBox>
+    </center>
+</BorderPane>
