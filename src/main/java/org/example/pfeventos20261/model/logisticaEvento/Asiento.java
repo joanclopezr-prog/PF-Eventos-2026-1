@@ -1,17 +1,18 @@
 package org.example.pfeventos20261.model.logisticaEvento;
 
+import javafx.util.Pair;
 import org.example.pfeventos20261.model.enums.EstadoAsiento;
 
 public class Asiento {
     private String idAsiento;
-    private String fila;
+    private Pair<Integer,Integer> posicion;
     private int numero;
     private EstadoAsiento estado;
 
-    public Asiento(String idAsiento, String fila, int numero, EstadoAsiento estado) {
+    public Asiento(String idAsiento, int numero,Pair<Integer,Integer> posicion, EstadoAsiento estado) {
         this.idAsiento = idAsiento;
-        this.fila = fila;
         this.numero = numero;
+        this.posicion = posicion;
         this.estado = estado;
     }
 }
