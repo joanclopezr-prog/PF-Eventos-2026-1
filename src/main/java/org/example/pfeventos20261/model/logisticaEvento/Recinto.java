@@ -15,4 +15,7 @@ public class Recinto {
         this.zonas = zonas;
     }
 
+    public List<Zona> getZonas() {
+        return zonas;
+    }
 }

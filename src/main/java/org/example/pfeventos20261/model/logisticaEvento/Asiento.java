@@ -15,4 +15,8 @@ public class Asiento {
         this.posicion = posicion;
         this.estado = estado;
     }
+
+    public Pair<Integer, Integer> getPosicion() {
+        return posicion;
+    }
 }

@@ -2,7 +2,6 @@ package org.example.pfeventos20261.model.logisticaEvento;
 
 import javafx.util.Pair;
 import org.example.pfeventos20261.model.enums.TipoZona;
-
 import java.util.List;
 
 public class Zona {
@@ -20,5 +19,17 @@ public class Zona {
         this.precioBase = precioBase;
         this.posicion = posicion;
         this.asientos = asientos;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Pair<Integer, Integer> getPosicion() {
+        return posicion;
+    }
+
+    public List<Asiento> getAsientos() {
+        return asientos;
     }
 }

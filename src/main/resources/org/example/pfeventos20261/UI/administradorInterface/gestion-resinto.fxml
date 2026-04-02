@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      style="-fx-background-color: white; -fx-background-radius: 10;">
+
+    <padding>
+        <Insets top="20" left="20" right="20" bottom="20"/>
+    </padding>
+
+    <VBox spacing="5">
+        <Text text="Gestión de Recintos" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-fill: #2c3e50;"/>
+        <Text text="Administra los lugares físicos y sus configuraciones espaciales." style="-fx-fill: #7f8c8d;"/>
+    </VBox>
+
+    <Separator />
+
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+
+        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #fcfcfc; -fx-padding: 15; -fx-border-color: #eee; -fx-border-radius: 5;">
+            <Text text="Datos del Recinto" style="-fx-font-weight: bold; -fx-fill: #34495e;"/>
+
+            <VBox spacing="5">
+                <Label text="ID Recinto" style="-fx-font-size: 11;"/>
+                <TextField fx:id="txtIdRecinto" promptText="Ej: REC-001" style="-fx-pref-height: 35;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Nombre del Lugar" style="-fx-font-size: 11;"/>
+                <TextField fx:id="txtNombreRecinto" promptText="Ej: Teatro Nacional" style="-fx-pref-height: 35;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Dirección" style="-fx-font-size: 11;"/>
+                <TextField fx:id="txtDireccionRecinto" promptText="Ej: Calle 10 # 5-20" style="-fx-pref-height: 35;"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Button fx:id="btnGuardarRecinto" text="Guardar / Actualizar" maxWidth="Infinity"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-height: 40;"/>
+
+            <Button fx:id="btnLimpiarForm" text="Limpiar Campos" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-border-color: #bdc3c7; -fx-border-radius: 3;"/>
+        </VBox>
+
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="txtBuscarRecinto" promptText="Filtrar por nombre o dirección..." HBox.hgrow="ALWAYS" style="-fx-pref-height: 35;"/>
+                <Button text="🔍" style="-fx-pref-height: 35;"/>
+            </HBox>
+
+            <TableView fx:id="tblRecintos" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="80" />
+                    <TableColumn fx:id="colNombre" text="Nombre" prefWidth="200" />
+                    <TableColumn fx:id="colDireccion" text="Dirección" prefWidth="250" />
+                    <TableColumn fx:id="colZonas" text="N° Zonas" prefWidth="80" />
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+            </TableView>
+
+            <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                <Button fx:id="btnEliminarRecinto" text="Eliminar"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+
+                <Separator orientation="VERTICAL" />
+
+                <Button fx:id="btnConfigurarMapa" text="⚙️ Configurar Zonas y Asientos"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>
