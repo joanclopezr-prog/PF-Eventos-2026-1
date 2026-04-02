@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.canvas.Canvas?>
+
+<HBox spacing="0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #ecf0f1;"
+      fx:controller="org.example.pfeventos20261.viewController.administrador.GestionAsientosViewController">
+
+    <VBox spacing="15" prefWidth="350" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+        <padding>
+            <Insets top="20" left="20" right="20" bottom="20"/>
+        </padding>
+
+        <Text text="Configurador de Recinto" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+        <Separator/>
+
+        <Label text="1. Seleccionar Recinto" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="cbRecintoDestino" promptText="Seleccione recinto..." maxWidth="Infinity" style="-fx-pref-height: 35;"/>
+
+        <TabPane fx:id="tabPaneEditor" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" style="-fx-border-color: #ddd;">
+            <tabs>
+                <Tab text="Añadir Zona">
+                    <VBox spacing="10" style="-fx-padding: 15;">
+                        <TextField fx:id="txtIdZona" promptText="ID Zona (Ej: Z-VIP)"/>
+                        <TextField fx:id="txtNombreZona" promptText="Nombre (Ej: VIP Norte)"/>
+                        <ComboBox fx:id="cbTipoZona" promptText="Tipo de Zona" maxWidth="Infinity"/>
+                        <TextField fx:id="txtPrecioBase" promptText="Precio Base ($)"/>
+                        <HBox spacing="10">
+                            <TextField fx:id="txtZonaX" promptText="Pos X" prefWidth="80"/>
+                            <TextField fx:id="txtZonaY" promptText="Pos Y" prefWidth="80"/>
+                        </HBox>
+                        <Button fx:id="btnGuardarZona" text="Registrar Zona" maxWidth="Infinity"
+                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </VBox>
+                </Tab>
+
+                <Tab text="Añadir Asientos">
+                    <VBox spacing="10" style="-fx-padding: 15;">
+                        <Label text="Zona seleccionada:" style="-fx-font-size: 11;"/>
+                        <Label fx:id="lblZonaActual" text="Ninguna" style="-fx-text-fill: #e67e22; -fx-font-weight: bold;"/>
+
+                        <Separator/>
+
+                        <TextField fx:id="txtNumeroAsiento" promptText="Número de Asiento"/>
+                        <HBox spacing="10">
+                            <TextField fx:id="txtAsientoX" promptText="Pos X" prefWidth="80"/>
+                            <TextField fx:id="txtAsientoY" promptText="Pos Y" prefWidth="80"/>
+                        </HBox>
+                        <Button fx:id="btnGuardarAsiento" text="Agregar Asiento" maxWidth="Infinity"
+                                style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+                        <Label text="Tip: Puedes hacer clic en el mapa para capturar X e Y"
+                               wrapText="true" style="-fx-font-size: 10; -fx-font-style: italic;"/>
+                    </VBox>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </VBox>
+
+    <VBox HBox.hgrow="ALWAYS" spacing="10">
+        <padding>
+            <Insets top="15" left="15" right="15" bottom="15"/>
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Text text="Vista Previa del Mapa" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Escala: 1px = 1 unidad" style="-fx-text-fill: #95a5a6;"/>
+        </HBox>
+
+        <ScrollPane VBox.vgrow="ALWAYS" style="-fx-background: #bdc3c7; -fx-border-color: #7f8c8d;">
+            <content>
+                <Pane fx:id="paneMapaRecinto" prefWidth="2000" prefHeight="2000"
+                      style="-fx-background-color: white;">
+                    <children>
+                        <Label text="Haga clic para posicionar elementos" layoutX="10" layoutY="10" textFill="#bdc3c7"/>
+                    </children>
+                </Pane>
+            </content>
+        </ScrollPane>
+
+        <HBox spacing="20" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 5;">
+            <Label text="Leyenda:" style="-fx-font-weight: bold;"/>
+            <HBox spacing="5" alignment="CENTER"><Region style="-fx-background-color: #3498db; -fx-pref-width: 15; -fx-pref-height: 15;"/><Label text="Zona"/></HBox>
+            <HBox spacing="5" alignment="CENTER"><Region style="-fx-background-color: #2ecc71; -fx-pref-width: 15; -fx-pref-height: 15; -fx-shape: 'M 10 20 A 10 10 0 1 1 10.001 20 Z';" /><Label text="Asiento Disponible"/></HBox>
+        </HBox>
+    </VBox>
+</HBox>
