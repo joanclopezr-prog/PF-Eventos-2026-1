@@ -1,5 +1,6 @@
 package org.example.pfeventos20261.model.logisticaEvento;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recinto {
@@ -12,7 +13,7 @@ public class Recinto {
         this.idRecinto = idRecinto;
         this.nombre = nombre;
         this.direccion = direccion;
-        this.zonas = null;
+        this.zonas = new ArrayList<>();
     }
 
     public List<Zona> getZonas() {
