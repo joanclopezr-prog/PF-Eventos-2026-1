@@ -33,7 +33,7 @@
                             <TextField fx:id="txtZonaX" promptText="Pos X" prefWidth="80"/>
                             <TextField fx:id="txtZonaY" promptText="Pos Y" prefWidth="80"/>
                         </HBox>
-                        <Button fx:id="btnGuardarZona" text="Registrar Zona" maxWidth="Infinity"
+                        <Button fx:id="btnGuardarZona" text="Registrar Zona" onAction="#onGuardarZona" maxWidth="Infinity"
                                 style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
                     </VBox>
                 </Tab>
@@ -50,7 +50,7 @@
                             <TextField fx:id="txtAsientoX" promptText="Pos X" prefWidth="80"/>
                             <TextField fx:id="txtAsientoY" promptText="Pos Y" prefWidth="80"/>
                         </HBox>
-                        <Button fx:id="btnGuardarAsiento" text="Agregar Asiento" maxWidth="Infinity"
+                        <Button fx:id="btnGuardarAsiento" text="Agregar Asiento" onAction="#onGuardarAsiento" maxWidth="Infinity"
                                 style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
                         <Label text="Tip: Puedes hacer clic en el mapa para capturar X e Y"

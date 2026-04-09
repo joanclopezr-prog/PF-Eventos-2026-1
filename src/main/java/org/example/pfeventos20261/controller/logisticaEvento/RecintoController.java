@@ -1,7 +1,11 @@
 package org.example.pfeventos20261.controller.logisticaEvento;
 
 import org.example.pfeventos20261.model.SimuladorDB;
+import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
+import org.example.pfeventos20261.model.logisticaEvento.Zona;
+
+import java.util.List;
 
 public class RecintoController {
     private SimuladorDB simuladorDB;
@@ -20,5 +24,17 @@ public class RecintoController {
 
     public void updateRecinto(Recinto viejo, Recinto nuevo){
         simuladorDB.updateRecinto(viejo, nuevo);
+    }
+
+
+    public List<Recinto> getRecintos(){
+        return simuladorDB.getRecintos();
+    }
+
+    public void agregarZona(Recinto recinto, Zona nuevaZona) {
+
+    }
+
+    public void agregarAsiento(Recinto recinto, String idZona, Asiento nuevoAsiento) {
     }
 }

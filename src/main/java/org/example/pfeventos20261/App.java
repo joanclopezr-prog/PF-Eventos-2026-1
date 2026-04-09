@@ -6,9 +6,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Parent;
+import org.example.pfeventos20261.model.SimuladorDB;
+import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.viewController.administrador.GestionAsientosViewController;
 
 public class App extends Application {
+    public static SimuladorDB simuladorDB = SimuladorDB.getInstance();
     private Stage stage;
     @Override
     public void start(Stage stage) throws IOException {
@@ -21,6 +24,7 @@ public class App extends Application {
     private void openViewPrincipal() {
         try {
             //System.out.println("URL del FXML: " + App.class.getResource("UI/administradorInterface/gestion-asientos.fxml"));
+            simuladorDB.addRecinto(new Recinto("10203","lalo","jfaklj"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("UI/administradorInterface/gestion-asientos.fxml"));
             Parent rootLayout = loader.load();
