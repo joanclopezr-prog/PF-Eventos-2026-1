@@ -4,11 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Pair;
 import org.example.pfeventos20261.App;
 import org.example.pfeventos20261.controller.logisticaEvento.EventoController;
 import org.example.pfeventos20261.controller.logisticaEvento.RecintoController;
@@ -18,8 +17,6 @@ import org.example.pfeventos20261.model.enums.TipoZona;
 import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
-
-import java.util.List;
 
 public class GestionAsientosViewController {
 
@@ -31,7 +28,7 @@ public class GestionAsientosViewController {
     @FXML private TextField txtIdZona, txtNombreZona, txtPrecioBase, txtZonaX, txtZonaY;
     @FXML private TextField txtNumeroAsiento, txtAsientoX, txtAsientoY;
     @FXML private Label lblZonaActual;
-    @FXML private Pane paneMapaRecinto;
+    @FXML private GridPane gridRecinto;
 
     private Recinto recintoActual;
     private Zona zonaSeleccionada;
@@ -41,7 +38,6 @@ public class GestionAsientosViewController {
     void initialize() {
         eventoController = new EventoController(App.simuladorDB);
         recintoController = new RecintoController(App.simuladorDB);
-
         initView();
         initListeners();
     }
@@ -76,148 +72,120 @@ public class GestionAsientosViewController {
             recintoActual = newValue;
             System.out.println("Seleccion actual: " + recintoActual);
         });
-
-        paneMapaRecinto.setOnMouseClicked(event -> {
-            String x = String.valueOf((int) event.getX());
-            String y = String.valueOf((int) event.getY());
-
-            txtZonaX.setText(x);
-            txtZonaY.setText(y);
-
-            if (zonaSeleccionada != null) {
-                int rx = (int) event.getX() - zonaSeleccionada.getPosicion().getX();
-                int ry = (int) event.getY() - zonaSeleccionada.getPosicion().getY();
-                txtAsientoX.setText(String.valueOf(Math.max(0, rx)));
-                txtAsientoY.setText(String.valueOf(Math.max(0, ry)));
-            } else {
-                txtAsientoX.setText(x);
-                txtAsientoY.setText(y);
-            }
-        });
     }
-
     @FXML
     public void onGuardarZona(ActionEvent event) {
         if (recintoActual == null) return;
-
         try {
-            Zona nuevaZona = new Zona(
+            Zona zona = new Zona(
                     txtIdZona.getText(),
                     Double.parseDouble(txtPrecioBase.getText()),
                     tipoZonaSeleccionada,
                     txtNombreZona.getText(),
-                    new ParMutable(Integer.parseInt(txtZonaX.getText()), Integer.parseInt(txtZonaY.getText()))
+                    new ParMutable(
+                            Integer.parseInt(txtZonaX.getText()),
+                            Integer.parseInt(txtZonaY.getText()))
             );
-
-            recintoController.agregarZona(recintoActual, nuevaZona);
-            System.out.println("resinto"+recintoController.getRecintos().getFirst().getZonas());
-
-            this.zonaSeleccionada = nuevaZona;
-            lblZonaActual.setText(nuevaZona.getNombre());
-
+            recintoController.agregarZona(recintoActual, zona);
+            zonaSeleccionada = zona;
+            lblZonaActual.setText(zona.getNombre());
         } catch (Exception e) {
             mostrarAlerta("Error", "Datos de zona inválidos.");
+            return;
         }
-        refrescarMapa();
-        limpiarCamposZona();
+        refrescarGrid();
+        txtIdZona.clear(); txtNombreZona.clear();
+        txtPrecioBase.clear(); txtZonaY.clear(); txtZonaX.clear();
     }
 
     @FXML
     public void onGuardarAsiento(ActionEvent event) {
         if (zonaSeleccionada == null) {
-            mostrarAlerta("Aviso", "Selecciona una zona en el mapa primero.");
+            mostrarAlerta("Aviso", "Selecciona una zona primero.");
             return;
         }
-
         try {
-            Asiento nuevoAsiento = new Asiento(
+            Asiento asiento = new Asiento(
                     "AS-" + txtNumeroAsiento.getText(),
                     Integer.parseInt(txtNumeroAsiento.getText()),
-                    new ParMutable(Integer.parseInt(txtAsientoX.getText()),Integer.parseInt(txtAsientoY.getText())),
+                    new ParMutable(
+                            Integer.parseInt(txtAsientoX.getText()),
+                            Integer.parseInt(txtAsientoY.getText())),
                     EstadoAsiento.DISPONIBLE
             );
-
-            recintoController.agregarAsiento(recintoActual, zonaSeleccionada, nuevoAsiento);
-            refrescarMapa();
-
+            recintoController.agregarAsiento(recintoActual, zonaSeleccionada, asiento);
         } catch (Exception e) {
             mostrarAlerta("Error", "Datos de asiento inválidos.");
+            return;
         }
-
+        refrescarGrid();
+        txtNumeroAsiento.clear(); txtAsientoX.clear(); txtAsientoY.clear();
     }
 
-    private void refrescarMapa() {
-        paneMapaRecinto.getChildren().clear();
+    private void refrescarGrid() {
+        gridRecinto.getChildren().clear();
         if (recintoActual == null || recintoActual.getZonas() == null) return;
 
         for (Zona z : recintoActual.getZonas()) {
-            pintarZona(z);
-            if (z.getAsientos() == null) continue; // ← continue, no return
-            for (Asiento a : z.getAsientos()) {
-                pintarAsiento(a, z); // ← pasamos la zona para calcular offset
+            Button btnZona = new Button(z.getNombre());
+
+            btnZona.setOnAction(e -> seleccionarZona(z)); // añadir accion de la zona
+
+            btnZona.setStyle("-fx-background-color:" + colorSegunEstadoZona(z.getTipoZona()) + ";"+
+                    "-fx-text-fill: white;" +
+                    "-fx-border-color: #1a6fa8; -fx-border-width: 2.5;" +
+                    "-fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8;");
+            GridPane.setHgrow(btnZona, Priority.SOMETIMES);
+            GridPane.setVgrow(btnZona, Priority.SOMETIMES);
+            btnZona.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            GridPane gridZona = new GridPane();
+
+            if (z.getAsientos() != null) {
+                for (Asiento a : z.getAsientos()) {
+                    Button btnAsiento = new Button(String.valueOf(a.getNumero()));
+                    // NOTA: si quieres hacer algo al clickear un asiento (seleccionarlo,
+                    // cambiar estado, etc.) agrégalo aquí dentro del handler
+//                    btnAsiento.setOnAction(e -> onClickAsiento(a, z)); <--- añadir accion
+
+                    // Posición 1-based → GridPane 0-based
+                    gridZona.add(btnAsiento,
+                            a.getPosicion().getX() - 1,
+                            a.getPosicion().getY() - 1);
+                }
             }
+
+            // Zona: botón arriba + asientos abajo, apilados verticalmente
+            VBox contenedorZona = new VBox(btnZona, gridZona);
+
+            gridRecinto.add(contenedorZona,
+                    z.getPosicion().getX() - 1,
+                    z.getPosicion().getY() - 1);
         }
     }
 
-    private void pintarZona(Zona z) {
-        // Tamaño fijo por tipo de zona, o un mínimo razonable
-        double ancho = calcularAnchoZona(z);
-        double alto  = calcularAltoZona(z);
-
-        Rectangle rect = new Rectangle(ancho, alto, Color.web("#3498db", 0.2));
-        rect.setStroke(Color.web("#3498db"));
-        rect.setStrokeWidth(2);
-
-        // Posición de la zona en el panel
-        rect.setLayoutX(z.getPosicion().getX());
-        rect.setLayoutY(z.getPosicion().getY());
-
-        // Label con el nombre dentro de la zona
-        Label lbl = new Label(z.getNombre());
-        lbl.setLayoutX(z.getPosicion().getX() + 4);
-        lbl.setLayoutY(z.getPosicion().getY() + 4);
-        lbl.setStyle("-fx-font-size: 10px; -fx-text-fill: #2980b9;");
-
-        rect.setOnMouseClicked(e -> {
-            this.zonaSeleccionada = z;
-            lblZonaActual.setText(z.getNombre());
-            e.consume();
-        });
-
-        paneMapaRecinto.getChildren().addAll(rect, lbl);
+    private void seleccionarZona(Zona z) {
+        zonaSeleccionada = z;
+        lblZonaActual.setText(z.getNombre());
     }
 
-    private void pintarAsiento(Asiento a, Zona zona) {
-        Circle c = new Circle(6, Color.web("#2ecc71"));
-
-        // Posición absoluta = posición zona + posición relativa del asiento
-        c.setLayoutX(zona.getPosicion().getX()*12 + a.getPosicion().getX()*12);
-        c.setLayoutY(zona.getPosicion().getY()*12 + a.getPosicion().getY()*12);
-
-        c.setStroke(Color.web("#27ae60"));
-        c.setStrokeWidth(1);
-
-        // Tooltip con número de asiento
-        Tooltip tp = new Tooltip("Asiento " + a.getNumero());
-        Tooltip.install(c, tp);
-
-        paneMapaRecinto.getChildren().add(c);
+    private void onClickAsiento(Asiento a, Zona z) {
+         System.out.println("Asiento " + a.getNumero() + " en zona " + z.getNombre());
     }
 
-    private double calcularAnchoZona(Zona z) {
-        if (z.getAsientos() == null || z.getAsientos().isEmpty()) return 80;
-        return z.getAsientos().stream()
-                .mapToInt(a -> a.getPosicion().getX())
-                .max()
-                .orElse(60) + 20;
+    private String colorSegunEstadoZona(TipoZona zona) {
+        return switch (zona) {
+            case VIP -> "#2ecc71";
+            case PREFERENCIAL  -> "#e67e22";
+            case GENERAL    -> "#e74c3c";
+        };
     }
-
-    private double calcularAltoZona(Zona z) {
-        if (z.getAsientos() == null || z.getAsientos().isEmpty()) return 80;
-        return z.getAsientos().stream()
-                .mapToInt(a -> a.getPosicion().getY())
-                .max()
-                .orElse(60) + 20;
+    private String colorSegunEstadoAsiento(EstadoAsiento estado) {
+        return switch (estado) {
+            case DISPONIBLE -> "#2ecc71";
+            case RESERVADO  -> "#e67e22";
+            case VENDIDO    -> "#e74c3c";
+            case BLOQUEADO  -> "#808080";
+        };
     }
 
     private void limpiarCamposZona() {

@@ -74,12 +74,7 @@
 
         <ScrollPane VBox.vgrow="ALWAYS" style="-fx-background: #bdc3c7; -fx-border-color: #7f8c8d;">
             <content>
-                <Pane fx:id="paneMapaRecinto" prefWidth="2000" prefHeight="2000"
-                      style="-fx-background-color: white;">
-                    <children>
-                        <Label text="Haga clic para posicionar elementos" layoutX="10" layoutY="10" textFill="#bdc3c7"/>
-                    </children>
-                </Pane>
+                <ScrollPane><GridPane fx:id="gridRecinto" hgap="4" vgap="4"/></ScrollPane>
             </content>
         </ScrollPane>
 
