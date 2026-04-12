@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import org.example.pfeventos20261.App;
 import org.example.pfeventos20261.controller.logisticaEvento.EventoController;
 import org.example.pfeventos20261.controller.logisticaEvento.RecintoController;
@@ -61,6 +60,7 @@ public class GestionAsientosViewController {
 
         cbTipoZona.setItems(FXCollections.observableArrayList(TipoZona.values()));
 
+
     }
 
     private void initListeners() {
@@ -73,6 +73,7 @@ public class GestionAsientosViewController {
             System.out.println("Seleccion actual: " + recintoActual);
         });
     }
+
     @FXML
     public void onGuardarZona(ActionEvent event) {
         if (recintoActual == null) return;
@@ -90,18 +91,21 @@ public class GestionAsientosViewController {
             zonaSeleccionada = zona;
             lblZonaActual.setText(zona.getNombre());
         } catch (Exception e) {
-            mostrarAlerta("Error", "Datos de zona inválidos.");
+            mostrarAlerta("error", "datos de zona invalidos");
             return;
         }
         refrescarGrid();
-        txtIdZona.clear(); txtNombreZona.clear();
-        txtPrecioBase.clear(); txtZonaY.clear(); txtZonaX.clear();
+        txtIdZona.clear();
+        txtNombreZona.clear();
+        txtPrecioBase.clear();
+        txtZonaY.clear();
+        txtZonaX.clear();
     }
 
     @FXML
     public void onGuardarAsiento(ActionEvent event) {
         if (zonaSeleccionada == null) {
-            mostrarAlerta("Aviso", "Selecciona una zona primero.");
+            mostrarAlerta("ojo", "seleccione una zona primero.");
             return;
         }
         try {
@@ -110,12 +114,13 @@ public class GestionAsientosViewController {
                     Integer.parseInt(txtNumeroAsiento.getText()),
                     new ParMutable(
                             Integer.parseInt(txtAsientoX.getText()),
-                            Integer.parseInt(txtAsientoY.getText())),
+                            Integer.parseInt(txtAsientoY.getText())
+                    ),
                     EstadoAsiento.DISPONIBLE
             );
             recintoController.agregarAsiento(recintoActual, zonaSeleccionada, asiento);
         } catch (Exception e) {
-            mostrarAlerta("Error", "Datos de asiento inválidos.");
+            mostrarAlerta("error", "datos de asiento invalidos.");
             return;
         }
         refrescarGrid();
@@ -129,12 +134,9 @@ public class GestionAsientosViewController {
         for (Zona z : recintoActual.getZonas()) {
             Button btnZona = new Button(z.getNombre());
 
-            btnZona.setOnAction(e -> seleccionarZona(z)); // añadir accion de la zona
+            btnZona.setOnAction(e -> seleccionarZona(z)); // <--- añadir accion de la zona
+            btnZona.setStyle("-fx-background-color:#76CFA5;");
 
-            btnZona.setStyle("-fx-background-color:" + colorSegunEstadoZona(z.getTipoZona()) + ";"+
-                    "-fx-text-fill: white;" +
-                    "-fx-border-color: #1a6fa8; -fx-border-width: 2.5;" +
-                    "-fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8;");
             GridPane.setHgrow(btnZona, Priority.SOMETIMES);
             GridPane.setVgrow(btnZona, Priority.SOMETIMES);
             btnZona.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -143,19 +145,13 @@ public class GestionAsientosViewController {
             if (z.getAsientos() != null) {
                 for (Asiento a : z.getAsientos()) {
                     Button btnAsiento = new Button(String.valueOf(a.getNumero()));
-                    // NOTA: si quieres hacer algo al clickear un asiento (seleccionarlo,
-                    // cambiar estado, etc.) agrégalo aquí dentro del handler
-//                    btnAsiento.setOnAction(e -> onClickAsiento(a, z)); <--- añadir accion
-
-                    // Posición 1-based → GridPane 0-based
                     gridZona.add(btnAsiento,
                             a.getPosicion().getX() - 1,
                             a.getPosicion().getY() - 1);
                 }
             }
-
-            // Zona: botón arriba + asientos abajo, apilados verticalmente
             VBox contenedorZona = new VBox(btnZona, gridZona);
+            contenedorZona.setStyle("-fx-background-color:" + colorSegunEstadoZona(z.getTipoZona()) + ";");
 
             gridRecinto.add(contenedorZona,
                     z.getPosicion().getX() - 1,
