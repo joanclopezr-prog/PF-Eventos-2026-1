@@ -3,6 +3,8 @@ package org.example.pfeventos20261.controller.logisticaEvento;
 import org.example.pfeventos20261.model.SimuladorDB;
 import org.example.pfeventos20261.model.logisticaEvento.Evento;
 
+import java.util.List;
+
 public class EventoController {
     private SimuladorDB simuladorDB;
 
@@ -20,6 +22,10 @@ public class EventoController {
 
     public void updateEvento(Evento viejo, Evento nuevo){
         simuladorDB.updateEvento(viejo, nuevo);
+    }
+
+    public List<Evento> getEventos(){
+        return simuladorDB.getEventos();
     }
 
 }

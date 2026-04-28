@@ -2,6 +2,7 @@ package org.example.pfeventos20261.model;
 
 import org.example.pfeventos20261.model.logisticaEvento.Evento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
+import org.example.pfeventos20261.model.logisticaEvento.Zona;
 import org.example.pfeventos20261.model.logisticaVentas.Compra;
 import org.example.pfeventos20261.model.usuario.Usuario;
 import java.util.ArrayList;
@@ -22,19 +23,26 @@ public final class SimuladorDB {
         return instance;
     }
 
-    public static List<Usuario> getUsuarios() {
+    public List<Usuario> getUsuarios() {
         return usuarios;
     }
 
-    public static List<Evento> getEventos() {
+    public void addZonaRecinto(Recinto recinto, Zona zona){
+        int index = recintos.indexOf(recinto);
+        List<Zona> newListZonas = recintos.get(index).getZonas();
+        newListZonas.add(zona);
+        recintos.get(index).setZonas(newListZonas);
+    }
+
+    public List<Evento> getEventos() {
         return eventos;
     }
 
-    public static List<Compra> getCompras() {
+    public List<Compra> getCompras() {
         return compras;
     }
 
-    public static List<Recinto> getRecintos() {
+    public List<Recinto> getRecintos() {
         return recintos;
     }
 
@@ -96,5 +104,6 @@ public final class SimuladorDB {
             recintos.set(index, nuevo);
         }
     }
+
 
 }

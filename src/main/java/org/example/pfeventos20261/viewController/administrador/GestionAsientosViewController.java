@@ -1,115 +1,197 @@
 package org.example.pfeventos20261.viewController.administrador;
 
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Pair;
-import org.example.pfeventos20261.model.SimuladorDB;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import org.example.pfeventos20261.App;
+import org.example.pfeventos20261.controller.logisticaEvento.EventoController;
+import org.example.pfeventos20261.controller.logisticaEvento.RecintoController;
+import org.example.pfeventos20261.model.ParMutable;
 import org.example.pfeventos20261.model.enums.EstadoAsiento;
 import org.example.pfeventos20261.model.enums.TipoZona;
 import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
 
-import java.util.ArrayList;
-
 public class GestionAsientosViewController {
 
-    @FXML private Button btnGuardarZona;
-    @FXML private Button btnGuardarAsiento;
-    @FXML private TabPane tabPaneEditor;
+    private EventoController eventoController;
+    private RecintoController recintoController;
+
     @FXML private ComboBox<Recinto> cbRecintoDestino;
+    @FXML private ComboBox<TipoZona> cbTipoZona;
     @FXML private TextField txtIdZona, txtNombreZona, txtPrecioBase, txtZonaX, txtZonaY;
     @FXML private TextField txtNumeroAsiento, txtAsientoX, txtAsientoY;
     @FXML private Label lblZonaActual;
-    @FXML private Pane paneMapaRecinto;
+    @FXML private GridPane gridRecinto;
 
     private Recinto recintoActual;
     private Zona zonaSeleccionada;
+    private TipoZona tipoZonaSeleccionada;
 
     @FXML
-    public void initialize() {
-        cbRecintoDestino.getItems().addAll(SimuladorDB.recintos);
-        cbRecintoDestino.setOnAction(e -> {
-            this.recintoActual = cbRecintoDestino.getValue();
-            refrescarMapa();
+    void initialize() {
+        eventoController = new EventoController(App.simuladorDB);
+        recintoController = new RecintoController(App.simuladorDB);
+        initView();
+        initListeners();
+    }
+
+    private void initView() {
+        cbRecintoDestino.setItems(FXCollections.observableArrayList(App.simuladorDB.getRecintos()));
+        cbRecintoDestino.setCellFactory(lv -> new ListCell<Recinto>() {
+            @Override
+            protected void updateItem(Recinto recinto, boolean empty) {
+                super.updateItem(recinto, empty);
+                setText(empty || recinto == null ? null : recinto.getNombre() + " (" + recinto.getIdRecinto() + ")");
+            }
         });
-        paneMapaRecinto.setOnMouseClicked(event -> {
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            txtZonaX.setText(String.valueOf(x));
-            txtZonaY.setText(String.valueOf(y));
-            txtAsientoX.setText(String.valueOf(x));
-            txtAsientoY.setText(String.valueOf(y));
+        cbRecintoDestino.setButtonCell(new ListCell<Recinto>() {
+            @Override
+            protected void updateItem(Recinto recinto, boolean empty) {
+                super.updateItem(recinto, empty);
+                setText(empty || recinto == null ? null : recinto.getNombre() + " (" + recinto.getIdRecinto() + ")");
+            }
+        });
+
+        cbTipoZona.setItems(FXCollections.observableArrayList(TipoZona.values()));
+
+
+    }
+
+    private void initListeners() {
+        cbTipoZona.valueProperty().addListener((obs, oldValue, newValue) -> {
+            tipoZonaSeleccionada = newValue;
+            System.out.println("Seleccion actual: " + tipoZonaSeleccionada);
+        });
+        cbRecintoDestino.valueProperty().addListener((obs, oldValue, newValue) -> {
+            recintoActual = newValue;
+            System.out.println("Seleccion actual: " + recintoActual);
         });
     }
 
     @FXML
-    private void handleGuardarZona() {
+    public void onGuardarZona(ActionEvent event) {
         if (recintoActual == null) return;
-
-        String id = txtIdZona.getText();
-        String nombre = txtNombreZona.getText();
-        double precio = Double.parseDouble(txtPrecioBase.getText());
-        int x = Integer.parseInt(txtZonaX.getText());
-        int y = Integer.parseInt(txtZonaY.getText());
-        Zona nuevaZona = new Zona(id, precio, TipoZona.GENERAL, nombre, new Pair<>(x, y), new ArrayList<>());
-        recintoActual.getZonas().add(nuevaZona);
-        this.zonaSeleccionada = nuevaZona;
-        lblZonaActual.setText(nombre);
-
-        refrescarMapa();
-    }
-
-    @FXML
-    private void handleGuardarAsiento() {
-        if (zonaSeleccionada == null) {
-            System.out.println("Primero debes crear o seleccionar una zona");
+        try {
+            Zona zona = new Zona(
+                    txtIdZona.getText(),
+                    Double.parseDouble(txtPrecioBase.getText()),
+                    tipoZonaSeleccionada,
+                    txtNombreZona.getText(),
+                    new ParMutable(
+                            Integer.parseInt(txtZonaX.getText()),
+                            Integer.parseInt(txtZonaY.getText()))
+            );
+            recintoController.agregarZona(recintoActual, zona);
+            zonaSeleccionada = zona;
+            lblZonaActual.setText(zona.getNombre());
+        } catch (Exception e) {
+            mostrarAlerta("error", "datos de zona invalidos");
             return;
         }
-
-        int num = Integer.parseInt(txtNumeroAsiento.getText());
-        int x = Integer.parseInt(txtAsientoX.getText());
-        int y = Integer.parseInt(txtAsientoY.getText());
-
-        // Creamos el asiento
-        Asiento nuevoAsiento = new Asiento("A-" + num, num, new Pair<>(x, y), EstadoAsiento.DISPONIBLE);
-
-        zonaSeleccionada.getAsientos().add(nuevoAsiento);
-
-        refrescarMapa();
+        refrescarGrid();
+        txtIdZona.clear();
+        txtNombreZona.clear();
+        txtPrecioBase.clear();
+        txtZonaY.clear();
+        txtZonaX.clear();
     }
 
-    /**
-     * El corazón de la vista: Borra el panel y dibuja todo según el modelo
-     */
-    private void refrescarMapa() {
-        paneMapaRecinto.getChildren().clear();
+    @FXML
+    public void onGuardarAsiento(ActionEvent event) {
+        if (zonaSeleccionada == null) {
+            mostrarAlerta("ojo", "seleccione una zona primero.");
+            return;
+        }
+        try {
+            Asiento asiento = new Asiento(
+                    "AS-" + txtNumeroAsiento.getText(),
+                    Integer.parseInt(txtNumeroAsiento.getText()),
+                    new ParMutable(
+                            Integer.parseInt(txtAsientoX.getText()),
+                            Integer.parseInt(txtAsientoY.getText())
+                    ),
+                    EstadoAsiento.DISPONIBLE
+            );
+            recintoController.agregarAsiento(recintoActual, zonaSeleccionada, asiento);
+        } catch (Exception e) {
+            mostrarAlerta("error", "datos de asiento invalidos.");
+            return;
+        }
+        refrescarGrid();
+        txtNumeroAsiento.clear(); txtAsientoX.clear(); txtAsientoY.clear();
+    }
 
-        if (recintoActual == null) return;
+    private void refrescarGrid() {
+        gridRecinto.getChildren().clear();
+        if (recintoActual == null || recintoActual.getZonas() == null) return;
 
         for (Zona z : recintoActual.getZonas()) {
-            Rectangle rect = new Rectangle(100, 50);
-            rect.setLayoutX(z.getPosicion().getKey());
-            rect.setLayoutY(z.getPosicion().getValue());
-            rect.setFill(Color.web("#3498db", 0.3)); // azul transparente
-            rect.setStroke(Color.web("#3498db"));
-            rect.setOnMouseClicked(e -> {
-                this.zonaSeleccionada = z;
-                lblZonaActual.setText(z.getNombre());
-                e.consume();
-            });
-            paneMapaRecinto.getChildren().add(rect);
-            for (Asiento a : z.getAsientos()) {
-                Circle circulo = new Circle(8, Color.web("#2ecc71"));
-                circulo.setLayoutX(a.getPosicion().getKey());
-                circulo.setLayoutY(a.getPosicion().getValue());
+            Button btnZona = new Button(z.getNombre());
 
-                paneMapaRecinto.getChildren().add(circulo);
+            btnZona.setOnAction(e -> seleccionarZona(z)); // <--- añadir accion de la zona
+            btnZona.setStyle("-fx-background-color:#76CFA5;");
+
+            GridPane.setHgrow(btnZona, Priority.SOMETIMES);
+            GridPane.setVgrow(btnZona, Priority.SOMETIMES);
+            btnZona.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            GridPane gridZona = new GridPane();
+
+            if (z.getAsientos() != null) {
+                for (Asiento a : z.getAsientos()) {
+                    Button btnAsiento = new Button(String.valueOf(a.getNumero()));
+                    gridZona.add(btnAsiento,
+                            a.getPosicion().getX() - 1,
+                            a.getPosicion().getY() - 1);
+                }
             }
+            VBox contenedorZona = new VBox(btnZona, gridZona);
+            contenedorZona.setStyle("-fx-background-color:" + colorSegunEstadoZona(z.getTipoZona()) + ";");
+
+            gridRecinto.add(contenedorZona,
+                    z.getPosicion().getX() - 1,
+                    z.getPosicion().getY() - 1);
         }
+    }
+
+    private void seleccionarZona(Zona z) {
+        zonaSeleccionada = z;
+        lblZonaActual.setText(z.getNombre());
+    }
+
+    private void onClickAsiento(Asiento a, Zona z) {
+         System.out.println("Asiento " + a.getNumero() + " en zona " + z.getNombre());
+    }
+
+    private String colorSegunEstadoZona(TipoZona zona) {
+        return switch (zona) {
+            case VIP -> "#2ecc71";
+            case PREFERENCIAL  -> "#e67e22";
+            case GENERAL    -> "#e74c3c";
+        };
+    }
+    private String colorSegunEstadoAsiento(EstadoAsiento estado) {
+        return switch (estado) {
+            case DISPONIBLE -> "#2ecc71";
+            case RESERVADO  -> "#e67e22";
+            case VENDIDO    -> "#e74c3c";
+            case BLOQUEADO  -> "#808080";
+        };
+    }
+
+    private void limpiarCamposZona() {
+        txtIdZona.clear(); txtNombreZona.clear(); txtPrecioBase.clear();
+    }
+
+    private void mostrarAlerta(String titulo, String msj) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setContentText(msj);
+        alert.showAndWait();
     }
 }
