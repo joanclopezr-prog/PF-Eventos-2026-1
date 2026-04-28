@@ -4,27 +4,28 @@ import org.example.pfeventos20261.model.logisticaEvento.Evento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
 import org.example.pfeventos20261.model.logisticaVentas.Compra;
+import org.example.pfeventos20261.model.usuario.Persona;
 import org.example.pfeventos20261.model.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class SimuladorDB {
+public final class Proxy {
 
-    public static List<Usuario> usuarios = new ArrayList<>();
+    public static Persona usuario;
     public static List<Evento> eventos = new ArrayList<>();
     public static List<Compra> compras = new ArrayList<>();
     public static List<Recinto> recintos = new ArrayList<>();
-    private static SimuladorDB instance;
+    private static Proxy instance;
 
-    public static SimuladorDB getInstance(){
+    public static Proxy getInstance(){
         if(instance == null){
-            instance = new SimuladorDB();
+            instance = new Proxy();
         }
         return instance;
     }
 
-    public List<Usuario> getUsuarios() {
-        return usuarios;
+    public Persona getUsuarios() {
+        return usuario;
     }
 
     public void addZonaRecinto(Recinto recinto, Zona zona){
@@ -46,19 +47,12 @@ public final class SimuladorDB {
         return recintos;
     }
 
-    public void addUsuario(Usuario usuario){
-        usuarios.add(usuario);
+    public void setUsuario(Usuario usuario){
+        usuario = usuario;
     }
 
-    public void removeUsuario(Usuario usuario){
-        usuarios.remove(usuario);
-    }
-
-    public void updateUsuario(Usuario viejo, Usuario nuevo){
-        int index = usuarios.indexOf(viejo);
-        if(index != -1){
-            usuarios.set(index, nuevo);
-        }
+    public Persona getUsuario(){
+        return usuario;
     }
 
     public void addEvento(Evento evento){

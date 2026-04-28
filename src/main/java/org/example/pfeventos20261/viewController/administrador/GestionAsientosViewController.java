@@ -18,8 +18,6 @@ import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
 
 public class GestionAsientosViewController {
-
-    private EventoController eventoController;
     private RecintoController recintoController;
 
     @FXML private ComboBox<Recinto> cbRecintoDestino;
@@ -35,14 +33,13 @@ public class GestionAsientosViewController {
 
     @FXML
     void initialize() {
-        eventoController = new EventoController(App.simuladorDB);
-        recintoController = new RecintoController(App.simuladorDB);
+        recintoController = new RecintoController(App.proxy);
         initView();
         initListeners();
     }
 
     private void initView() {
-        cbRecintoDestino.setItems(FXCollections.observableArrayList(App.simuladorDB.getRecintos()));
+        cbRecintoDestino.setItems(FXCollections.observableArrayList(App.proxy.getRecintos()));
         cbRecintoDestino.setCellFactory(lv -> new ListCell<Recinto>() {
             @Override
             protected void updateItem(Recinto recinto, boolean empty) {
@@ -59,8 +56,6 @@ public class GestionAsientosViewController {
         });
 
         cbTipoZona.setItems(FXCollections.observableArrayList(TipoZona.values()));
-
-
     }
 
     private void initListeners() {
@@ -85,7 +80,8 @@ public class GestionAsientosViewController {
                     txtNombreZona.getText(),
                     new ParMutable(
                             Integer.parseInt(txtZonaX.getText()),
-                            Integer.parseInt(txtZonaY.getText()))
+                            Integer.parseInt(txtZonaY.getText())
+                    )
             );
             recintoController.agregarZona(recintoActual, zona);
             zonaSeleccionada = zona;
@@ -124,7 +120,9 @@ public class GestionAsientosViewController {
             return;
         }
         refrescarGrid();
-        txtNumeroAsiento.clear(); txtAsientoX.clear(); txtAsientoY.clear();
+        txtNumeroAsiento.clear();
+        txtAsientoX.clear();
+        txtAsientoY.clear();
     }
 
     private void refrescarGrid() {
@@ -134,7 +132,7 @@ public class GestionAsientosViewController {
         for (Zona z : recintoActual.getZonas()) {
             Button btnZona = new Button(z.getNombre());
 
-            btnZona.setOnAction(e -> seleccionarZona(z)); // <--- añadir accion de la zona
+//            btnZona.setOnAction(e -> seleccionarZona(z));  <--- añadir accion de la zona
             btnZona.setStyle("-fx-background-color:#76CFA5;");
 
             GridPane.setHgrow(btnZona, Priority.SOMETIMES);
@@ -185,7 +183,9 @@ public class GestionAsientosViewController {
     }
 
     private void limpiarCamposZona() {
-        txtIdZona.clear(); txtNombreZona.clear(); txtPrecioBase.clear();
+        txtIdZona.clear();
+        txtNombreZona.clear();
+        txtPrecioBase.clear();
     }
 
     private void mostrarAlerta(String titulo, String msj) {

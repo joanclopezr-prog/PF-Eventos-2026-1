@@ -1,26 +1,24 @@
 package org.example.pfeventos20261.controller.logisticaEvento;
 
-import org.example.pfeventos20261.model.SimuladorDB;
+import org.example.pfeventos20261.model.Proxy;
 import org.example.pfeventos20261.model.logisticaVentas.Compra;
 
-import java.util.List;
-
 public class CompraController {
-    private SimuladorDB simuladorDB;
+    private Proxy proxy;
 
-    public CompraController(SimuladorDB simuladorDB) {
-        this.simuladorDB = simuladorDB;
+    public CompraController(Proxy proxy) {
+        this.proxy = proxy;
     }
 
     public void addCompra(Compra compra){
-        simuladorDB.addCompra(compra);
+        proxy.addCompra(compra);
     }
 
     public void removeCompra(Compra compra){
-        simuladorDB.removeCompra(compra);
+        proxy.removeCompra(compra);
     }
 
     public void updateCompra(Compra vieja, Compra nueva){
-        simuladorDB.updateCompra(vieja, nueva);
+        proxy.updateCompra(vieja, nueva);
     }
 }
