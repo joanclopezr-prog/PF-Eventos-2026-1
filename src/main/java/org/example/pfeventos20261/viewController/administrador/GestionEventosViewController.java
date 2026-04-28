@@ -7,13 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import org.example.pfeventos20261.App;
+import org.example.pfeventos20261.controller.logisticaEvento.EventoController;
 import org.example.pfeventos20261.model.enums.EstadoEvento;
-import org.example.pfeventos20261.model.enums.TipoZona;
 import org.example.pfeventos20261.model.logisticaEvento.Evento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 
-public class GestionEventosViewController {
-
+public class GestionEventosViewController implements DashBoardInjectable{
+    EventoController eventoController;
+    private DashboardAdminViewController dashboard;
     @FXML private Button btnNuevoEvento;
     @FXML private Button btnEditar;
     @FXML private Button btnPublicar;
@@ -23,6 +24,7 @@ public class GestionEventosViewController {
 
     @FXML private TextField txtNombre;
     @FXML private TextField txtCategoria;
+    @FXML private DatePicker dpkFecha;
     @FXML private ComboBox<EstadoEvento> cbEstado;
     @FXML private ComboBox<Recinto> cbRecinto;
     @FXML private TableView<Evento> tblEventos;
@@ -38,27 +40,19 @@ public class GestionEventosViewController {
 
     @FXML
     private void initialize() {
-        configurarTabla();
+        eventoController = new EventoController(App.proxy);
         cargarEventos();
-        configurarFiltros();
+        initView();
         listenerSelecionEvento();
     }
 
-    private void configurarTabla() {
+    private void initView() {
         colId.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId()));
         colNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
         colFecha.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaHora().toString()));
         colLugar.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRecinto().toString()));
         colCategoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategoria()));
         colEstado.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEstado().toString()));
-    }
-
-    private void cargarEventos() {
-        listaEventos = FXCollections.observableArrayList(App.proxy.getEventos());
-        tblEventos.setItems(listaEventos);
-    }
-
-    private void configurarFiltros() {
         cbEstado.setItems(FXCollections.observableArrayList(EstadoEvento.values()));
 
         cbRecinto.setItems(FXCollections.observableArrayList(App.proxy.getRecintos()));
@@ -71,21 +65,66 @@ public class GestionEventosViewController {
         });
     }
 
-    @FXML
-    private void nuevoEvento(ActionEvent e) {
-
+    private void cargarEventos() {
+        listaEventos = FXCollections.observableArrayList(eventoController.getEventos());
+        tblEventos.setItems(listaEventos);
     }
 
     @FXML
-    private void editarEvento(ActionEvent e) {
+    public void onLimpiar(ActionEvent e){
+        limpiarCampos();
+    }
+    @FXML
+    public void onEliminar(ActionEvent e){
+        eliminarEvento();
+    }
+    @FXML
+    public void onAdd(ActionEvent e){
+        addEvento();
+    }
+    @FXML
+    public void onEditar(ActionEvent e){
+        editarEvento();
+    }
+
+    private void addEvento() {
+        try {
+            Evento evento = new Evento(new Evento.Builder(txtNombre.toString())
+                    .categoria(txtCategoria.toString())
+                    .estado(cbEstado.getValue())
+                    .recinto(cbRecinto.getValue())
+                    .fechaHora(dpkFecha.getValue())
+            );
+            eventoController.addEvento(evento);
+            eventoSeleccionado = evento;
+            limpiarCampos();
+        } catch (Exception i) {
+            mostrarAlerta("error", "datos de evento son invalidos."+ "-- "+i+" --");
+        }
+
+    }
+
+    private void editarEvento() {
         if (eventoSeleccionado != null) {
-            //falta logica aca
+            Evento evento = new Evento(new Evento.Builder(txtNombre.toString())
+                    .categoria(txtCategoria.toString())
+                    .estado(cbEstado.getValue())
+                    .recinto(cbRecinto.getValue())
+                    .fechaHora(dpkFecha.getValue())
+            );
+            eventoController.updateEvento(eventoSeleccionado,evento);
+            eventoSeleccionado = evento;
+            limpiarCampos();
         }
     }
+    private void eliminarEvento() {
+        eventoController.removeEvento(eventoSeleccionado);
+        limpiarCampos();
+    }
 
 
-    @FXML
-    private void limpiarFiltros(ActionEvent e) {
+
+    private void limpiarCampos() {
         txtNombre.clear();
         txtCategoria.clear();
         cbRecinto.getSelectionModel().clearSelection();
@@ -96,7 +135,17 @@ public class GestionEventosViewController {
     private void listenerSelecionEvento() {
         tblEventos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             eventoSeleccionado = (Evento) newSelection;
-//            selectedPropietario = newSelection;
         });
+    }
+
+    private void mostrarAlerta(String titulo, String msj) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setContentText(msj);
+        alert.showAndWait();
+    }
+
+    public void setDashboardController(DashboardAdminViewController dashboard) {
+        this.dashboard = dashboard;
     }
 }

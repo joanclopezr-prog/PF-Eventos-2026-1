@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.pfeventos20261.viewController.administrador.DashboardAdminViewController">
 
     <left>
         <VBox prefWidth="250" spacing="10" style="-fx-background-color: #1a252f;">
@@ -24,11 +24,11 @@
                 <padding><Insets top="15" /></padding>
             </Label>
 
-            <Button fx:id="btnGestionEventos" alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Eventos" />
+            <Button fx:id="btnGestionEventos" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#handleGestionEventos" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Eventos" />
 
-            <Button fx:id="btnGestionRecintos" alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Recintos y Zonas" />
+            <Button fx:id="btnGestionRecintos" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#handleGestionRecintos" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Recintos y Zonas" />
 
-            <Button fx:id="btnGestionAsientos" alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Asientos" />
+            <Button fx:id="btnGestionAsientos" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#handleGestionAsientos" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Asientos" />
 
             <Label style="-fx-font-size: 10; -fx-font-weight: bold;" text="OPERACIONES" textFill="#7f8c8d">
                 <padding><Insets top="15" /></padding>
@@ -65,14 +65,14 @@
                 </HBox>
             </HBox>
 
-            <StackPane fx:id="contentAreaAdmin" VBox.vgrow="ALWAYS">
+            <StackPane VBox.vgrow="ALWAYS">
                 <padding>
                     <Insets bottom="25" left="25" right="25" top="25" />
                 </padding>
-                <VBox alignment="CENTER" spacing="10">
+                <AnchorPane fx:id="contentAreaAdmin" >
                     <Text style="-fx-font-size: 20; -fx-fill: #95a5a6;" text="Panel de Control Principal" />
                     <Text style="-fx-fill: #bdc3c7;" text="Seleccione una categoría a la izquierda para gestionar el sistema." />
-                </VBox>
+                </AnchorPane>
             </StackPane>
         </VBox>
     </center>

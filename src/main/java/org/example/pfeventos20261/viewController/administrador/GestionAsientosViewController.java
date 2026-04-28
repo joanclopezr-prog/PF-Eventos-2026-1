@@ -8,7 +8,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.example.pfeventos20261.App;
-import org.example.pfeventos20261.controller.logisticaEvento.EventoController;
 import org.example.pfeventos20261.controller.logisticaEvento.RecintoController;
 import org.example.pfeventos20261.model.ParMutable;
 import org.example.pfeventos20261.model.enums.EstadoAsiento;
@@ -17,8 +16,10 @@ import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
 
-public class GestionAsientosViewController {
+public class GestionAsientosViewController implements DashBoardInjectable{
     private RecintoController recintoController;
+    private DashboardAdminViewController dashboard;
+
 
     @FXML private ComboBox<Recinto> cbRecintoDestino;
     @FXML private ComboBox<TipoZona> cbTipoZona;
@@ -193,5 +194,8 @@ public class GestionAsientosViewController {
         alert.setTitle(titulo);
         alert.setContentText(msj);
         alert.showAndWait();
+    }
+    public void setDashboardController(DashboardAdminViewController dashboard) {
+        this.dashboard = dashboard;
     }
 }
