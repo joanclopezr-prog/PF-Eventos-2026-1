@@ -1,24 +1,22 @@
 package org.example.pfeventos20261.controller.logisticaEvento;
 
-import org.example.pfeventos20261.model.SimuladorDB;
+import org.example.pfeventos20261.model.Proxy;
+import org.example.pfeventos20261.model.usuario.Persona;
 import org.example.pfeventos20261.model.usuario.Usuario;
 
 public class UsuarioController {
-    private SimuladorDB simuladorDB;
+    private Proxy proxy;
 
-    public UsuarioController(SimuladorDB simuladorDB) {
-        this.simuladorDB = simuladorDB;
+    public UsuarioController(Proxy proxy) {
+        this.proxy = proxy;
     }
 
-    public void addUsuario(Usuario usuario){
-        simuladorDB.addUsuario(usuario);
+    public void setUsuario(Usuario usuario){
+        proxy.setUsuario(usuario);
     }
 
-    public void removeUsuario(Usuario usuario){
-        simuladorDB.removeUsuario(usuario);
+    public Persona getUsuario(Persona persona){
+        return proxy.getUsuario();
     }
 
-    public void updateUsuario(Usuario viejo, Usuario nuevo){
-        simuladorDB.updateUsuario(viejo, nuevo);
-    }
 }

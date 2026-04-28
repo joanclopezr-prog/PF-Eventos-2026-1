@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 public class Evento {
     private String id;
     private String nombre;
-    private String categoria;
+    private String categoria;  //
     private LocalDateTime fechaHora;
-    private EstadoEvento estado;
-    private Recinto recinto;
+    private EstadoEvento estado;  //
+    private Recinto recinto;   //
 
     private Evento(Builder builder) {
         this.id = builder.id;
@@ -20,6 +20,29 @@ public class Evento {
         this.recinto = builder.recinto;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public EstadoEvento getEstado() {
+        return estado;
+    }
+
+    public Recinto getRecinto() {
+        return recinto;
+    }
 
     public static class Builder {
         private String id;
