@@ -1,17 +1,18 @@
 package org.example.pfeventos20261.model.logisticaEvento;
 
 import org.example.pfeventos20261.model.enums.EstadoEvento;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 public class Evento {
     private String id;
     private String nombre;
     private String categoria;  //
-    private LocalDateTime fechaHora;
+    private LocalDate fechaHora;
     private EstadoEvento estado;  //
     private Recinto recinto;   //
 
-    private Evento(Builder builder) {
+    public Evento(Builder builder) {
         this.id = builder.id;
         this.nombre = builder.nombre;
         this.categoria = builder.categoria;
@@ -32,7 +33,7 @@ public class Evento {
         return categoria;
     }
 
-    public LocalDateTime getFechaHora() {
+    public LocalDate getFechaHora() {
         return fechaHora;
     }
 
@@ -48,7 +49,7 @@ public class Evento {
         private String id;
         private final String nombre;
         private String categoria;
-        private LocalDateTime fechaHora;
+        private LocalDate fechaHora;
         private EstadoEvento estado;
         private Recinto recinto;
 
@@ -67,7 +68,7 @@ public class Evento {
         }
 
 
-        public Builder fechaHora(LocalDateTime fechaHora) {
+        public Builder fechaHora(LocalDate fechaHora) {
             this.fechaHora = fechaHora;
             return this;
         }

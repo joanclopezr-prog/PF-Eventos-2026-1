@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox spacing="20" fx:controller="org.example.pfeventos20261.viewController.administrador.GestionEventosViewController" style="-fx-background-color: white; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
@@ -53,15 +53,11 @@
             <padding><Insets right="10" /></padding>
         </Label>
 
-        <Button fx:id="btnLimpiarFiltros" style="-fx-pref-height: 35;" text="Limpiar" />
-
-        <Button fx:id="btnEditar" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Editar" />
-
+        <Button fx:id="btnLimpiarFiltros" onAction="#onLimpiar" style="-fx-background-color: #2980b9; -fx-text-fill: white;" text="limpiar" />
+        <Button fx:id="btnEditar" onAction="#onEditar" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="editar" />
         <Separator orientation="VERTICAL" />
-
-        <Button fx:id="btnPublicar" style="-fx-background-color: #2980b9; -fx-text-fill: white;" text="Publicar" />
-        <Button fx:id="btnPausar" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Pausar" />
-        <Button fx:id="btnCancelar" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Cancelar Evento" />
+        <Button fx:id="btnAdd" onAction="#onAdd" style="-fx-background-color: #2980b9; -fx-text-fill: white;" text="añadir evento" />
+        <Button fx:id="btnCancelar" onAction="#onEliminar" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="eliminar evento" />
     </HBox>
 
 </VBox>

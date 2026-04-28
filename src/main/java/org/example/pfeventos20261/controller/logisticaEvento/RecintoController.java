@@ -4,6 +4,7 @@ import org.example.pfeventos20261.model.Proxy;
 import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
+import org.example.pfeventos20261.viewController.administrador.DashboardAdminViewController;
 
 import java.util.List;
 
