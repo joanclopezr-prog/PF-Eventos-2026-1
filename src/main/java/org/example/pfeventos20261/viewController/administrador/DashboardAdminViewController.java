@@ -6,12 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.example.pfeventos20261.App;
-
 import java.io.IOException;
 
 public class DashboardAdminViewController {
@@ -64,20 +60,6 @@ public class DashboardAdminViewController {
         System.out.println("Sesión cerrada.");
     }
 
-
-//    private void cargarVista() {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(App.class.getResource("gestion-eventos.fxml"));
-//            AnchorPane rootLayout = loader.load();
-//            GestionEventosViewController gestionEventosViewController = loader.getController();
-//            gestionEventosViewController.setDashboardController(this);
-//            loadView(rootLayout);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            mostrarError("No se pudo cargar la vista: ");
-//        }
-//    }
     private void cargarVista(String fxml) {
         try {
             FXMLLoader loader = new FXMLLoader(

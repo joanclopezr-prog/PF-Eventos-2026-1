@@ -3,11 +3,11 @@ package org.example.pfeventos20261.model.logisticaEvento;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recinto {
+public class Recinto implements IEvento{
     private String idRecinto;
     private String nombre;
     private String direccion;
-    private List<Zona> zonas;
+    private List<IEvento> zonas;
 
     public Recinto(String idRecinto, String nombre, String direccion) {
         this.idRecinto = idRecinto;
@@ -16,11 +16,11 @@ public class Recinto {
         this.zonas = new ArrayList<>();
     }
 
-    public List<Zona> getZonas() {
+    public List<IEvento> getZonas() {
         return zonas;
     }
 
-    public void setZonas(List<Zona> zonas) {
+    public void setZonas(List<IEvento> zonas) {
         this.zonas = zonas;
     }
 
@@ -34,5 +34,10 @@ public class Recinto {
 
     public String getDireccion() {
         return direccion;
+    }
+
+    @Override
+    public List<IEvento> getHijos() {
+        return zonas;
     }
 }

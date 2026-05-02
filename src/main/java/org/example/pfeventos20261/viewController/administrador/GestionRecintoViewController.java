@@ -46,18 +46,24 @@ public class GestionRecintoViewController implements DashBoardInjectable{
     @FXML
     public void onLimpiar(ActionEvent e){
         limpiarFormulario();
+        cargarRecintos();
     }
     @FXML
     public void onEliminar(ActionEvent e){
         eliminarRecinto();
+        cargarRecintos();
     }
     @FXML
     public void onAdd(ActionEvent e){
         guardarRecinto();
+        limpiarFormulario();
+        cargarRecintos();
     }
     @FXML
     public void onEditar(ActionEvent e){
         editarRecinto();
+        limpiarFormulario();
+        cargarRecintos();
     }
 
     private void initView() {
@@ -83,9 +89,9 @@ public class GestionRecintoViewController implements DashBoardInjectable{
     private void guardarRecinto() {
         try{
             Recinto recinto = new Recinto(
-                    txtNombreRecinto.toString(),
-                    txtNombreRecinto.toString(),
-                    txtDireccionRecinto.toString()
+                    txtNombreRecinto.getText(),
+                    txtNombreRecinto.getText(),
+                    txtDireccionRecinto.getText()
             );
             recintoController.addRecinto(recinto);
         } catch (Exception i) {
@@ -99,7 +105,7 @@ public class GestionRecintoViewController implements DashBoardInjectable{
         if (seleccionado != null) {
             txtNombreRecinto.setText(seleccionado.getNombre());
             txtDireccionRecinto.setText(seleccionado.getDireccion());
-            // Decorator: aplicar validaciones o permisos según rol
+
         }
     }
 
@@ -107,7 +113,6 @@ public class GestionRecintoViewController implements DashBoardInjectable{
     private void eliminarRecinto() {
         if (recintoSeleccionado != null) {
             recintoController.removeRecinto(recintoSeleccionado);
-            cargarRecintos();
         }
     }
 
@@ -118,6 +123,7 @@ public class GestionRecintoViewController implements DashBoardInjectable{
     private void limpiarFormulario() {
         txtNombreRecinto.clear();
         txtDireccionRecinto.clear();
+
     }
     private void listenerSelecionRecinto() {
         tblRecintos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

@@ -3,14 +3,15 @@ package org.example.pfeventos20261.model.logisticaEvento;
 import org.example.pfeventos20261.model.enums.EstadoEvento;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public class Evento {
+public class Evento implements IEvento{
     private String id;
     private String nombre;
-    private String categoria;  //
+    private String categoria;
     private LocalDate fechaHora;
-    private EstadoEvento estado;  //
-    private Recinto recinto;   //
+    private EstadoEvento estado;
+    private List<IEvento> recintos;
 
     public Evento(Builder builder) {
         this.id = builder.id;
@@ -18,7 +19,12 @@ public class Evento {
         this.categoria = builder.categoria;
         this.fechaHora = builder.fechaHora;
         this.estado = builder.estado;
-        this.recinto = builder.recinto;
+        this.recintos = builder.recintos;
+    }
+
+    @Override
+    public List<IEvento> getHijos() {
+        return recintos;
     }
 
     public String getId() {
@@ -41,24 +47,25 @@ public class Evento {
         return estado;
     }
 
-    public Recinto getRecinto() {
-        return recinto;
+    public List<IEvento> getRecinto() {
+        return recintos;
     }
+
 
     public static class Builder {
         private String id;
-        private final String nombre;
+        private String nombre;
         private String categoria;
         private LocalDate fechaHora;
         private EstadoEvento estado;
-        private Recinto recinto;
+        private List<IEvento> recintos;
 
-        public Builder(String nombre) {
-            this.nombre = nombre;
+        public Builder(String id) {
+            this.id = id;
         }
 
-        public Builder id(String id) {
-            this.id = id;
+        public Builder nombre(String nombre) {
+            this.nombre = nombre;
             return this;
         }
 
@@ -78,8 +85,8 @@ public class Evento {
             return this;
         }
 
-        public Builder recinto(Recinto recinto) {
-            this.recinto = recinto;
+        public Builder recintos(List<IEvento> recintos) {
+            this.recintos = recintos;
             return this;
         }
 

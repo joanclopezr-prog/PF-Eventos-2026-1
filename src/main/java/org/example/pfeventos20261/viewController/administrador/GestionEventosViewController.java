@@ -13,8 +13,9 @@ import org.example.pfeventos20261.model.logisticaEvento.Evento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 
 public class GestionEventosViewController implements DashBoardInjectable{
-    EventoController eventoController;
+    private EventoController eventoController;
     private DashboardAdminViewController dashboard;
+
     @FXML private Button btnNuevoEvento;
     @FXML private Button btnEditar;
     @FXML private Button btnPublicar;
@@ -47,12 +48,30 @@ public class GestionEventosViewController implements DashBoardInjectable{
     }
 
     private void initView() {
-        colId.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId()));
-        colNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
-        colFecha.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFechaHora().toString()));
-        colLugar.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRecinto().toString()));
-        colCategoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategoria()));
-        colEstado.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEstado().toString()));
+        colId.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getId())
+        );
+
+        colNombre.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNombre() != null ? cellData.getValue().getNombre() : " ")
+        );
+
+        colFecha.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getFechaHora() != null ? cellData.getValue().getFechaHora().toString() : " ")
+        );
+
+        colLugar.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getRecinto().getNombre() != null ? cellData.getValue().getRecinto().toString() : " ")
+        );
+
+        colCategoria.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCategoria() != null ? cellData.getValue().getCategoria() : " ")
+        );
+
+        colEstado.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEstado() != null ? cellData.getValue().getEstado().toString() : " ")
+        );
+
         cbEstado.setItems(FXCollections.observableArrayList(EstadoEvento.values()));
 
         cbRecinto.setItems(FXCollections.observableArrayList(App.proxy.getRecintos()));
@@ -73,53 +92,60 @@ public class GestionEventosViewController implements DashBoardInjectable{
     @FXML
     public void onLimpiar(ActionEvent e){
         limpiarCampos();
+        cargarEventos();
     }
     @FXML
     public void onEliminar(ActionEvent e){
         eliminarEvento();
+        limpiarCampos();
+        cargarEventos();
     }
     @FXML
     public void onAdd(ActionEvent e){
         addEvento();
+        limpiarCampos();
+        cargarEventos();
     }
     @FXML
     public void onEditar(ActionEvent e){
         editarEvento();
+        limpiarCampos();
+        cargarEventos();
     }
 
     private void addEvento() {
         try {
-            Evento evento = new Evento(new Evento.Builder(txtNombre.toString())
-                    .categoria(txtCategoria.toString())
-                    .estado(cbEstado.getValue())
-                    .recinto(cbRecinto.getValue())
-                    .fechaHora(dpkFecha.getValue())
-            );
+
+            Evento evento = new Evento.Builder(txtNombre.getText())
+                                .nombre(txtNombre.getText())
+                                .categoria(txtCategoria.getText())
+                                .estado(cbEstado.getValue())
+                                .recinto(cbRecinto.getValue())
+                                .fechaHora(dpkFecha.getValue())
+                                .build();
+
             eventoController.addEvento(evento);
             eventoSeleccionado = evento;
-            limpiarCampos();
         } catch (Exception i) {
             mostrarAlerta("error", "datos de evento son invalidos."+ "-- "+i+" --");
         }
-
     }
 
     private void editarEvento() {
         if (eventoSeleccionado != null) {
-            Evento evento = new Evento(new Evento.Builder(txtNombre.toString())
-                    .categoria(txtCategoria.toString())
+            Evento evento = new Evento.Builder(txtNombre.getText())
+                    .nombre(txtNombre.getText())
+                    .categoria(txtCategoria.getText())
                     .estado(cbEstado.getValue())
                     .recinto(cbRecinto.getValue())
                     .fechaHora(dpkFecha.getValue())
-            );
+                    .build();
             eventoController.updateEvento(eventoSeleccionado,evento);
             eventoSeleccionado = evento;
-            limpiarCampos();
         }
     }
     private void eliminarEvento() {
         eventoController.removeEvento(eventoSeleccionado);
-        limpiarCampos();
     }
 
 
@@ -129,7 +155,6 @@ public class GestionEventosViewController implements DashBoardInjectable{
         txtCategoria.clear();
         cbRecinto.getSelectionModel().clearSelection();
         cbEstado.getSelectionModel().clearSelection();
-        cargarEventos();
     }
 
     private void listenerSelecionEvento() {

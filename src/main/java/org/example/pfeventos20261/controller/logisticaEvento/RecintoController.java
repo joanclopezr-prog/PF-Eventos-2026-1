@@ -39,7 +39,6 @@ public class RecintoController {
         recintoDB.getZonas().add(nuevaZona);
         proxy.updateRecinto(recinto, recintoDB);
         System.out.println(".........");
-
     }
 
 

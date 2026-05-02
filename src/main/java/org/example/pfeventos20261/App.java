@@ -3,16 +3,11 @@ package org.example.pfeventos20261;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.io.IOException;
-import javafx.scene.Parent;
 import org.example.pfeventos20261.model.Proxy;
-import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.viewController.administrador.DashboardAdminViewController;
-import org.example.pfeventos20261.viewController.administrador.GestionAsientosViewController;
-import org.example.pfeventos20261.viewController.administrador.GestionEventosViewController;
 
 public class App extends Application {
     public static Proxy proxy = Proxy.getInstance();

@@ -7,7 +7,7 @@ import org.example.pfeventos20261.model.enums.TipoZona;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zona {
+public class Zona implements IEvento{
     private String idZona;
     private TipoZona tipoZona;
     private String nombre;
@@ -70,5 +70,10 @@ public class Zona {
 
     public void setAsientos(List<Asiento> asientos) {
         this.asientos = asientos;
+    }
+
+    @Override
+    public List<IEvento> getHijos() {
+        return asientos;
     }
 }

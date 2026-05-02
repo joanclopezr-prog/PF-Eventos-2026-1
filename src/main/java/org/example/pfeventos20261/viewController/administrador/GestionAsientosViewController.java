@@ -16,6 +16,7 @@ import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
 
+
 public class GestionAsientosViewController implements DashBoardInjectable{
     private RecintoController recintoController;
     private DashboardAdminViewController dashboard;
@@ -30,6 +31,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
 
     private Recinto recintoActual;
     private Zona zonaSeleccionada;
+    private Asiento asientoSeleccionado;
     private TipoZona tipoZonaSeleccionada;
 
     @FXML
@@ -39,15 +41,42 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         initListeners();
     }
 
+    @FXML
+    public void onGuardarZona(ActionEvent event) {
+        guardarZona();
+    }
+
+    @FXML
+    public void onGuardarAsiento(ActionEvent event) {
+        guardarAsiento();
+    }
+    @FXML
+    public void onEditarZona(ActionEvent actionEvent) {
+
+    }
+    @FXML
+    public void onEliminarZona(ActionEvent actionEvent) {
+    }
+    @FXML
+    public void onEditarAsiento(ActionEvent actionEvent) {
+    }
+    @FXML
+    public void onEliminarAsiento(ActionEvent actionEvent) {
+    }
+
     private void initView() {
+
         cbRecintoDestino.setItems(FXCollections.observableArrayList(App.proxy.getRecintos()));
+
         cbRecintoDestino.setCellFactory(lv -> new ListCell<Recinto>() {
+
             @Override
             protected void updateItem(Recinto recinto, boolean empty) {
                 super.updateItem(recinto, empty);
                 setText(empty || recinto == null ? null : recinto.getNombre() + " (" + recinto.getIdRecinto() + ")");
             }
         });
+
         cbRecintoDestino.setButtonCell(new ListCell<Recinto>() {
             @Override
             protected void updateItem(Recinto recinto, boolean empty) {
@@ -57,6 +86,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         });
 
         cbTipoZona.setItems(FXCollections.observableArrayList(TipoZona.values()));
+
     }
 
     private void initListeners() {
@@ -67,11 +97,13 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         cbRecintoDestino.valueProperty().addListener((obs, oldValue, newValue) -> {
             recintoActual = newValue;
             System.out.println("Seleccion actual: " + recintoActual);
+            if (recintoActual != null){
+                refrescarGrid();
+            }
         });
     }
 
-    @FXML
-    public void onGuardarZona(ActionEvent event) {
+    private void guardarZona(){
         if (recintoActual == null) return;
         try {
             Zona zona = new Zona(
@@ -92,15 +124,35 @@ public class GestionAsientosViewController implements DashBoardInjectable{
             return;
         }
         refrescarGrid();
-        txtIdZona.clear();
-        txtNombreZona.clear();
-        txtPrecioBase.clear();
-        txtZonaY.clear();
-        txtZonaX.clear();
+        limpiarCamposZona();
     }
 
-    @FXML
-    public void onGuardarAsiento(ActionEvent event) {
+    private void editarZona(){
+        if (recintoActual == null) return;
+        try {
+            Zona zona = new Zona(
+                    txtIdZona.getText(),
+                    Double.parseDouble(txtPrecioBase.getText()),
+                    tipoZonaSeleccionada,
+                    txtNombreZona.getText(),
+                    new ParMutable(
+                            Integer.parseInt(txtZonaX.getText()),
+                            Integer.parseInt(txtZonaY.getText())
+                    )
+            );
+            recintoController.agregarZona(recintoActual, zona);
+            zonaSeleccionada = zona;
+            lblZonaActual.setText(zona.getNombre());
+        } catch (Exception e) {
+            mostrarAlerta("error", "datos de zona invalidos");
+            return;
+        }
+        refrescarGrid();
+        limpiarCamposZona();
+    }
+
+
+    private void guardarAsiento(){
         if (zonaSeleccionada == null) {
             mostrarAlerta("ojo", "seleccione una zona primero.");
             return;
@@ -121,9 +173,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
             return;
         }
         refrescarGrid();
-        txtNumeroAsiento.clear();
-        txtAsientoX.clear();
-        txtAsientoY.clear();
+        limpiarCamposAsiento();
     }
 
     private void refrescarGrid() {
@@ -133,8 +183,8 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         for (Zona z : recintoActual.getZonas()) {
             Button btnZona = new Button(z.getNombre());
 
-//            btnZona.setOnAction(e -> seleccionarZona(z));  <--- añadir accion de la zona
-            btnZona.setStyle("-fx-background-color:#76CFA5;");
+            btnZona.setOnAction(e -> seleccionarZona(z));
+            btnZona.setStyle("-fx-background-color:"+ colorSegunEstadoZona(z.getTipoZona())+";");
 
             GridPane.setHgrow(btnZona, Priority.SOMETIMES);
             GridPane.setVgrow(btnZona, Priority.SOMETIMES);
@@ -144,6 +194,12 @@ public class GestionAsientosViewController implements DashBoardInjectable{
             if (z.getAsientos() != null) {
                 for (Asiento a : z.getAsientos()) {
                     Button btnAsiento = new Button(String.valueOf(a.getNumero()));
+                    btnAsiento.setOnAction(e -> seleccionarAsiento(a,z));
+                    btnAsiento.setStyle(
+                            "-fx-background-color:"+colorSegunEstadoAsiento(a.getEstado())+";" +
+                                    "-fx-background-radius: 50;" +
+                                    "-fx-border-radius: 50;"
+                    );
                     gridZona.add(btnAsiento,
                             a.getPosicion().getX() - 1,
                             a.getPosicion().getY() - 1);
@@ -158,13 +214,26 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         }
     }
 
+
     private void seleccionarZona(Zona z) {
+        txtIdZona.setText(z.getIdZona());
+        txtNombreZona.setText(z.getNombre());
+        txtPrecioBase.setText(z.getPrecioBase()+"");
+        txtZonaY.setText(z.getPosicion().getY()+"");
+        txtZonaX.setText(z.getPosicion().getX()+"");
+        cbTipoZona.setValue(z.getTipoZona());
         zonaSeleccionada = z;
         lblZonaActual.setText(z.getNombre());
     }
 
-    private void onClickAsiento(Asiento a, Zona z) {
-         System.out.println("Asiento " + a.getNumero() + " en zona " + z.getNombre());
+
+    //falta logica aca mi muchacho
+    private void seleccionarAsiento(Asiento a, Zona z) {
+        txtNumeroAsiento.setText(a.getNumero()+"");
+        txtAsientoX.setText(a.getPosicion().getX()+"");
+        txtAsientoY.setText(a.getPosicion().getY()+"");
+        zonaSeleccionada = z;
+        asientoSeleccionado = a;
     }
 
     private String colorSegunEstadoZona(TipoZona zona) {
@@ -187,6 +256,13 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         txtIdZona.clear();
         txtNombreZona.clear();
         txtPrecioBase.clear();
+        txtZonaY.clear();
+        txtZonaX.clear();
+    }
+    private void limpiarCamposAsiento(){
+        txtNumeroAsiento.clear();
+        txtAsientoX.clear();
+        txtAsientoY.clear();
     }
 
     private void mostrarAlerta(String titulo, String msj) {
@@ -195,6 +271,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         alert.setContentText(msj);
         alert.showAndWait();
     }
+
     public void setDashboardController(DashboardAdminViewController dashboard) {
         this.dashboard = dashboard;
     }
