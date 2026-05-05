@@ -3,15 +3,15 @@ package org.example.pfeventos20261.model.logisticaEvento;
 import org.example.pfeventos20261.model.enums.EstadoEvento;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public class Evento implements IEvento{
+public class Evento{
     private String id;
     private String nombre;
     private String categoria;
     private LocalDate fechaHora;
     private EstadoEvento estado;
-    private List<IEvento> recintos;
+    private Recinto recinto;
+    private RecintoFachade recintoFachade;
 
     public Evento(Builder builder) {
         this.id = builder.id;
@@ -19,12 +19,8 @@ public class Evento implements IEvento{
         this.categoria = builder.categoria;
         this.fechaHora = builder.fechaHora;
         this.estado = builder.estado;
-        this.recintos = builder.recintos;
-    }
-
-    @Override
-    public List<IEvento> getHijos() {
-        return recintos;
+        this.recinto = builder.recinto;
+        this.recintoFachade = new RecintoFachade(recinto);
     }
 
     public String getId() {
@@ -47,10 +43,14 @@ public class Evento implements IEvento{
         return estado;
     }
 
-    public List<IEvento> getRecinto() {
-        return recintos;
+    public Recinto getRecinto() {
+        return recinto;
     }
 
+    public void setRecinto(Recinto recinto) {
+        this.recinto = recinto;
+        this.recintoFachade = new RecintoFachade(recinto);
+    }
 
     public static class Builder {
         private String id;
@@ -58,7 +58,7 @@ public class Evento implements IEvento{
         private String categoria;
         private LocalDate fechaHora;
         private EstadoEvento estado;
-        private List<IEvento> recintos;
+        private Recinto recinto;
 
         public Builder(String id) {
             this.id = id;
@@ -85,8 +85,8 @@ public class Evento implements IEvento{
             return this;
         }
 
-        public Builder recintos(List<IEvento> recintos) {
-            this.recintos = recintos;
+        public Builder recinto(Recinto recinto) {
+            this.recinto = recinto;
             return this;
         }
 

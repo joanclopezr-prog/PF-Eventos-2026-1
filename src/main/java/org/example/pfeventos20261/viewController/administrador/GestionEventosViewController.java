@@ -12,6 +12,8 @@ import org.example.pfeventos20261.model.enums.EstadoEvento;
 import org.example.pfeventos20261.model.logisticaEvento.Evento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 
+import java.util.Optional;
+
 public class GestionEventosViewController implements DashBoardInjectable{
     private EventoController eventoController;
     private DashboardAdminViewController dashboard;
@@ -61,7 +63,11 @@ public class GestionEventosViewController implements DashBoardInjectable{
         );
 
         colLugar.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRecinto().getNombre() != null ? cellData.getValue().getRecinto().toString() : " ")
+                new SimpleStringProperty(
+                        Optional.ofNullable(cellData.getValue().getRecinto())
+                                .map(Recinto::getNombre)
+                                .orElse(" ")
+                )
         );
 
         colCategoria.setCellValueFactory(cellData ->
@@ -74,7 +80,7 @@ public class GestionEventosViewController implements DashBoardInjectable{
 
         cbEstado.setItems(FXCollections.observableArrayList(EstadoEvento.values()));
 
-        cbRecinto.setItems(FXCollections.observableArrayList(App.proxy.getRecintos()));
+        cbRecinto.setItems(FXCollections.observableArrayList(App.proxy.recintos().getAll()));
         cbRecinto.setCellFactory(lv -> new ListCell<Recinto>() {
             @Override
             protected void updateItem(Recinto recinto, boolean empty) {

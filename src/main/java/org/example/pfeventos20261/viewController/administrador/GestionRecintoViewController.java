@@ -105,6 +105,16 @@ public class GestionRecintoViewController implements DashBoardInjectable{
         if (seleccionado != null) {
             txtNombreRecinto.setText(seleccionado.getNombre());
             txtDireccionRecinto.setText(seleccionado.getDireccion());
+            try{
+                Recinto recinto = new Recinto(
+                        txtNombreRecinto.getText(),
+                        txtNombreRecinto.getText(),
+                        txtDireccionRecinto.getText()
+                );
+                recintoController.updateRecinto(recintoSeleccionado,recinto);
+            } catch (Exception i) {
+                mostrarAlerta("error", "datos de evento son invalidos."+ "-- "+i+" --");
+            }
 
         }
     }
@@ -116,9 +126,6 @@ public class GestionRecintoViewController implements DashBoardInjectable{
         }
     }
 
-//    private void configurarMapa() {
-//
-//    }
 
     private void limpiarFormulario() {
         txtNombreRecinto.clear();

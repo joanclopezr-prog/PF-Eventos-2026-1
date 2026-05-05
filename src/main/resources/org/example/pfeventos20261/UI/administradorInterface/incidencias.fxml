@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.pfeventos20261.viewController.administrador.IncidenciasViewController">
+
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <VBox spacing="5">
+        <Text style="-fx-font-size: 22; -fx-font-weight: bold; -fx-fill: #2c3e50;" text="Gestión de Recintos" />
+        <Text style="-fx-fill: #7f8c8d;" text="Administra los lugares físicos y sus configuraciones espaciales." />
+    </VBox>
+
+    <Separator />
+
+    <center>
+        <HBox alignment="CENTER" prefWidth="988.0" spacing="20" style="-fx-padding: 60;">
+
+
+            <PieChart fx:id="pieChart" prefHeight="330.0" prefWidth="394.0" title="asientos" />
+
+
+            <StackedBarChart fx:id="stackedBarChart" prefHeight="300" prefWidth="500">
+                <xAxis>
+                    <CategoryAxis label="Eventos" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="usuarios" />
+                </yAxis>
+            </StackedBarChart>
+
+        </HBox>
+    </center>
+
+    <bottom>
+        <Label prefHeight="46.0" prefWidth="962.0" style="-fx-font-size: 12px; -fx-text-fill: gray; -fx-padding: 10;" />
+    </bottom>
+   <left>
+      <ComboBox fx:id="cbRecinto" prefHeight="46.0" prefWidth="86.0" promptText="Evento" BorderPane.alignment="CENTER" />
+   </left>
+
+</BorderPane>

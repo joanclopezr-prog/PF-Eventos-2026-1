@@ -52,10 +52,11 @@ public class GestionAsientosViewController implements DashBoardInjectable{
     }
     @FXML
     public void onEditarZona(ActionEvent actionEvent) {
-
+        editarZona();
     }
     @FXML
     public void onEliminarZona(ActionEvent actionEvent) {
+        eliminarZona();
     }
     @FXML
     public void onEditarAsiento(ActionEvent actionEvent) {
@@ -66,7 +67,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
 
     private void initView() {
 
-        cbRecintoDestino.setItems(FXCollections.observableArrayList(App.proxy.getRecintos()));
+        cbRecintoDestino.setItems(FXCollections.observableArrayList(App.proxy.recintos().getAll()));
 
         cbRecintoDestino.setCellFactory(lv -> new ListCell<Recinto>() {
 
@@ -128,7 +129,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
     }
 
     private void editarZona(){
-        if (recintoActual == null) return;
+        if (zonaSeleccionada == null) return;
         try {
             Zona zona = new Zona(
                     txtIdZona.getText(),
@@ -143,6 +144,19 @@ public class GestionAsientosViewController implements DashBoardInjectable{
             recintoController.agregarZona(recintoActual, zona);
             zonaSeleccionada = zona;
             lblZonaActual.setText(zona.getNombre());
+        } catch (Exception e) {
+            mostrarAlerta("error", "datos de zona invalidos");
+            return;
+        }
+        refrescarGrid();
+        limpiarCamposZona();
+    }
+    private void eliminarZona(){
+        if (zonaSeleccionada == null) return;
+        try {
+            recintoController.eliminarZona(recintoActual,zonaSeleccionada);
+            zonaSeleccionada = null;
+//            lblZonaActual.setText();
         } catch (Exception e) {
             mostrarAlerta("error", "datos de zona invalidos");
             return;
