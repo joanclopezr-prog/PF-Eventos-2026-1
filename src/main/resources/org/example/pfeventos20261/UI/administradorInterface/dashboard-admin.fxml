@@ -38,7 +38,7 @@
 
             <Button fx:id="btnControlCompras" alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Ventas" />
 
-            <Button fx:id="btnIncidencias" alignment="BASELINE_LEFT" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Incidencias" />
+            <Button fx:id="btnIncidencias" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#handleIncidencias" style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1; -fx-cursor: hand;" text="Incidencias" />
 
             <Label style="-fx-font-size: 10; -fx-font-weight: bold;" text="ANALÍTICA" textFill="#7f8c8d">
                 <padding><Insets top="15" /></padding>

@@ -1,13 +1,13 @@
 package org.example.pfeventos20261.controller.logisticaEvento;
 
-import org.example.pfeventos20261.model.Proxy;
+import org.example.pfeventos20261.model.Cache;
 import org.example.pfeventos20261.model.usuario.Persona;
 import org.example.pfeventos20261.model.usuario.Usuario;
 
 public class UsuarioController {
-    private Proxy proxy;
+    private Cache proxy;
 
-    public UsuarioController(Proxy proxy) {
+    public UsuarioController(Cache proxy) {
         this.proxy = proxy;
     }
 

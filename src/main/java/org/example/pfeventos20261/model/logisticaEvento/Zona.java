@@ -7,7 +7,7 @@ import org.example.pfeventos20261.model.enums.TipoZona;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zona {
+public class Zona{
     private String idZona;
     private TipoZona tipoZona;
     private String nombre;

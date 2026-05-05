@@ -31,6 +31,8 @@
                             <TextField fx:id="txtZonaY" prefWidth="80" promptText="Pos Y" />
                         </HBox>
                         <Button fx:id="btnGuardarZona" maxWidth="Infinity" onAction="#onGuardarZona" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" text="Registrar Zona" />
+                  <Button fx:id="btnGuardarZona1" layoutX="25.0" layoutY="205.0" maxWidth="Infinity" onAction="#onEditarZona" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" text="editar" />
+                  <Button fx:id="btnGuardarZona11" layoutX="25.0" layoutY="241.0" maxWidth="Infinity" onAction="#onEliminarZona" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" text="eliminar" />
                     </VBox>
                 </Tab>
 
@@ -48,8 +50,8 @@
                         </HBox>
                         <ComboBox fx:id="cbAsientoTipo" maxWidth="Infinity" promptText="Seleccione el estado del asiento" style="-fx-pref-height: 35;" />
                         <Button fx:id="btnGuardarAsiento" maxWidth="Infinity" onAction="#onGuardarAsiento" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;" text="Agregar Asiento" />
-
-                        <Label style="-fx-font-size: 10; -fx-font-style: italic;" wrapText="true" />
+                  <Button fx:id="btnGuardarAsiento1" layoutX="25.0" layoutY="211.0" maxWidth="Infinity" onAction="#onEditarAsiento" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;" text="Editar" />
+                  <Button fx:id="btnGuardarAsiento11" layoutX="25.0" layoutY="272.0" maxWidth="Infinity" onAction="#onEliminarAsiento" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;" text="Eliminar" />
                     </VBox>
                 </Tab>
             </tabs>

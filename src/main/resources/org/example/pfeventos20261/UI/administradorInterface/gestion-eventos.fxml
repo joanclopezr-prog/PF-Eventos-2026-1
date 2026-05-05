@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox spacing="20" fx:controller="org.example.pfeventos20261.viewController.administrador.GestionEventosViewController" style="-fx-background-color: white; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.pfeventos20261.viewController.administrador.GestionEventosViewController">
 
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
@@ -16,22 +16,21 @@
             <Text style="-fx-font-size: 20; -fx-font-weight: bold; -fx-fill: #2c3e50;" text="Administración de Eventos" />
             <Text style="-fx-fill: #7f8c8d;" text="Crea, edita y gestiona el ciclo de vida de tus eventos." />
         </VBox>
-        <Button fx:id="btnNuevoEvento" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand;" text="+ Nuevo Evento" />
     </HBox>
 
     <Separator />
 
     <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 5;">
-        <TextField fx:id="txtNombre" prefWidth="300" promptText="nombre" style="-fx-pref-height: 35;" />
+        <TextField fx:id="txtNombre" prefWidth="178.0" promptText="nombre" style="-fx-pref-height: 35;" />
 
-        <TextField fx:id="txtCategoria" prefWidth="300" promptText="categoria" style="-fx-pref-height: 35;" />
+        <TextField fx:id="txtCategoria" prefWidth="156.0" promptText="categoria" style="-fx-pref-height: 35;" />
 
 
-        <ComboBox fx:id="cbEstado" prefWidth="150" promptText="Estado" style="-fx-pref-height: 35;" />
+        <ComboBox fx:id="cbEstado" prefWidth="128.0" promptText="Estado" style="-fx-pref-height: 35;" />
 
-        <ComboBox fx:id="cbRecinto" prefHeight="35.0" prefWidth="150.0" promptText="Recinto" />
+        <ComboBox fx:id="cbRecinto" prefHeight="35.0" prefWidth="187.0" promptText="Recinto" />
 
-        <DatePicker fx:id="dpkFecha" prefHeight="26.0" prefWidth="105.0" promptText="fecha" />
+        <DatePicker fx:id="dpkFecha" prefHeight="26.0" prefWidth="172.0" promptText="fecha" />
     </HBox>
 
     <TableView fx:id="tblEventos" prefHeight="348.0" prefWidth="812.0" style="-fx-background-radius: 5;" VBox.vgrow="ALWAYS">
@@ -49,13 +48,9 @@
     </TableView>
 
     <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10 0 0 0;">
-        <Label style="-fx-font-style: italic; -fx-text-fill: #7f8c8d;" text="Acciones para el evento seleccionado:">
-            <padding><Insets right="10" /></padding>
-        </Label>
 
         <Button fx:id="btnLimpiarFiltros" onAction="#onLimpiar" style="-fx-background-color: #2980b9; -fx-text-fill: white;" text="limpiar" />
         <Button fx:id="btnEditar" onAction="#onEditar" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="editar" />
-        <Separator orientation="VERTICAL" />
         <Button fx:id="btnAdd" onAction="#onAdd" style="-fx-background-color: #2980b9; -fx-text-fill: white;" text="añadir evento" />
         <Button fx:id="btnCancelar" onAction="#onEliminar" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="eliminar evento" />
     </HBox>

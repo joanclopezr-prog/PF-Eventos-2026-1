@@ -8,16 +8,9 @@ import javafx.scene.control.TextField;
 
 public class logginViewController {
 
-    @FXML
-    private Button btnLogin;
-
-    @FXML
-    private Hyperlink linkRegistro;
-
-    @FXML
-    private TextField txtCorreo;
-
-    @FXML
-    private PasswordField txtPassword;
+    @FXML private Button btnLogin;
+    @FXML private Hyperlink linkRegistro;
+    @FXML private TextField txtCorreo;
+    @FXML private PasswordField txtPassword;
 
 }

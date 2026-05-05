@@ -3,7 +3,7 @@ package org.example.pfeventos20261.model.logisticaEvento;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recinto {
+public class Recinto{
     private String idRecinto;
     private String nombre;
     private String direccion;
@@ -35,4 +35,5 @@ public class Recinto {
     public String getDireccion() {
         return direccion;
     }
+
 }

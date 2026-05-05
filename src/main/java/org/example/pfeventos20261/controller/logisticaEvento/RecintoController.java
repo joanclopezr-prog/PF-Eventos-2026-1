@@ -1,57 +1,54 @@
 package org.example.pfeventos20261.controller.logisticaEvento;
 
-import org.example.pfeventos20261.model.Proxy;
+import org.example.pfeventos20261.model.Cache;
 import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
-import org.example.pfeventos20261.viewController.administrador.DashboardAdminViewController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecintoController {
-    private Proxy proxy;
+    private Cache proxy;
 
-    public RecintoController(Proxy proxy) {
+    public RecintoController(Cache proxy) {
         this.proxy = proxy;
     }
 
     public void addRecinto(Recinto recinto){
-        proxy.addRecinto(recinto);
+        proxy.recintos().add(recinto);
     }
 
     public void removeRecinto(Recinto recinto){
-        proxy.removeRecinto(recinto);
+        proxy.recintos().remove(recinto);
     }
 
     public void updateRecinto(Recinto viejo, Recinto nuevo){
-        proxy.updateRecinto(viejo, nuevo);
+        proxy.recintos().update(viejo,nuevo);
     }
-
 
     public List<Recinto> getRecintos(){
-        return proxy.getRecintos();
+        return proxy.recintos().getAll();
     }
 
-    public void agregarZona(Recinto recinto, Zona nuevaZona) {
-        int index = proxy.getRecintos().indexOf(recinto);
-        if (index == -1) return;
-        Recinto recintoDB = proxy.getRecintos().get(index);
-        recintoDB.getZonas().add(nuevaZona);
-        proxy.updateRecinto(recinto, recintoDB);
-        System.out.println(".........");
-
+    public void agregarZona(Recinto recinto, Zona zona) {
+        proxy.recintos().getFachade(recinto).getzonas().add(zona);
+    }
+    public void eliminarZona(Recinto recinto, Zona zona) {
+        proxy.recintos().getFachade(recinto).getzonas().remove(zona);
+    }
+    public void editarZona(Recinto recinto, Zona zona,Zona zonaNueva){
+        int index = proxy.recintos().getFachade(recinto).getzonas().indexOf(zona);
+        if (index != 0){
+            proxy.recintos().getFachade(recinto).getzonas().set(index,zonaNueva);
+        }
+    }
+    public List<Asiento> getAsientos(Recinto recinto,Zona zona){
+        return proxy.recintos().getFachade(recinto).getAsientos(zona);
     }
 
 
     public void agregarAsiento(Recinto recinto, Zona zona, Asiento nuevoAsiento) {
-        int indexRecinto = proxy.getRecintos().indexOf(recinto);
-        if (indexRecinto == -1) return;
-
-        Recinto recintoDB = proxy.getRecintos().get(indexRecinto);
-        int indexZona = recintoDB.getZonas().indexOf(zona);
-        if (indexZona == -1) return;
-
-        recintoDB.getZonas().get(indexZona).getAsientos().add(nuevoAsiento);
-        proxy.updateRecinto(recinto, recintoDB);
+        proxy.recintos().getFachade(recinto).getAsientos(zona).add(nuevoAsiento);
     }
 }

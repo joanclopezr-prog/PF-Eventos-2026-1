@@ -3,7 +3,10 @@ package org.example.pfeventos20261.model.logisticaEvento;
 import org.example.pfeventos20261.model.ParMutable;
 import org.example.pfeventos20261.model.enums.EstadoAsiento;
 
-public class Asiento {
+import java.util.Collections;
+import java.util.List;
+
+public class Asiento{
     private String idAsiento;
     private ParMutable posicion;
     private int numero;
