@@ -7,30 +7,30 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.pfeventos20261.App;
-import org.example.pfeventos20261.viewController.administrador.DashBoardInjectable;
 
 import java.io.IOException;
 
-public class logginViewController {
+public class crearCuentaViewController {
 
-    @FXML
-    private TextField txtCorreo;
-    @FXML
-    private PasswordField txtPassword;
-    @FXML
-    private Button btnLogin;
-    @FXML
-    private Hyperlink linkRegistro;
+    @FXML private TextField txtCorreo;
+    @FXML private PasswordField txtPassword;
+    @FXML private PasswordField txtConfirmPassword;
+    @FXML private TextField txtAdminCode;
+    @FXML private Button btnCrearCuenta;
+
+    // Código de admin definido en tu lógica
+    private static final String ADMIN_CODE = "ADMIN2026";
 
     @FXML
     private void initialize() {
-        btnLogin.setOnAction(event -> iniciarSesion());
-        linkRegistro.setOnAction(event -> irARegistro());
+        btnCrearCuenta.setOnAction(event -> crearCuenta());
     }
 
-    private void iniciarSesion() {
+    private void crearCuenta() {
         String correo = txtCorreo.getText();
         String password = txtPassword.getText();
+        String confirmPassword = txtConfirmPassword.getText();
+        String adminCode = txtAdminCode.getText();
 
         // Validaciones básicas
         if (correo == null || correo.isEmpty()) {
@@ -41,35 +41,39 @@ public class logginViewController {
             mostrarAlerta("Debe ingresar una contraseña.");
             return;
         }
+        if (!password.equals(confirmPassword)) {
+            mostrarAlerta("Las contraseñas no coinciden.");
+            return;
+        }
 
-        // Aquí iría la lógica de autenticación contra tu backend/proxy
-        if (correo.equals("admin@correo.com") && password.equals("1234")) {
-            mostrarAlerta("Inicio de sesión como ADMIN exitoso.");
+        boolean esAdmin = adminCode != null && adminCode.equals(ADMIN_CODE);
+
+        // Aquí puedes llamar a tu servicio/proxy para crear la cuenta
+        if (esAdmin) {
+            mostrarAlerta("Cuenta de ADMIN creada correctamente.");
         } else {
-            mostrarAlerta("Inicio de sesión exitoso.");
+            mostrarAlerta("Cuenta de usuario creada correctamente.");
         }
     }
-
-    private void irARegistro() {
+    private void volverAlLogin() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    App.class.getResource("UI/login/registrar-view.fxml")
+                    App.class.getResource("UI/login/loggin-view.fxml")
             );
             Parent rootLayout = loader.load();
             Stage stage = (Stage) txtCorreo.getScene().getWindow();
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("No se pudo cargar la vista de registro.");
+            mostrarAlerta("No se pudo cargar la vista de login.");
         }
     }
 
     private void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Login");
+        alert.setTitle("Registro de Cuenta");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
