@@ -28,10 +28,10 @@
 
             <StackedBarChart fx:id="stackedBarChart" prefHeight="300" prefWidth="500">
                 <xAxis>
-                    <CategoryAxis label="Eventos" />
+                    <CategoryAxis label="zonas" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis label="usuarios" />
+                    <NumberAxis label="asientos" minorTickLength="1.0" tickLength="3.0" tickUnit="1.0" />
                 </yAxis>
             </StackedBarChart>
 
