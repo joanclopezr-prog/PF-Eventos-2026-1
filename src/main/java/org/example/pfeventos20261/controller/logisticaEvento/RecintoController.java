@@ -4,8 +4,6 @@ import org.example.pfeventos20261.model.Cache;
 import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
 import org.example.pfeventos20261.model.logisticaEvento.Zona;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecintoController {
@@ -43,10 +41,25 @@ public class RecintoController {
             proxy.recintos().getFachade(recinto).getzonas().set(index,zonaNueva);
         }
     }
+
     public List<Asiento> getAsientos(Recinto recinto,Zona zona){
         return proxy.recintos().getFachade(recinto).getAsientos(zona);
     }
 
+    public void eliminarAsiento(Recinto recinto,Zona zona,Asiento asiento){
+        int index = proxy.recintos().getFachade(recinto).getzonas().indexOf(zona);
+        if (index != 0) {
+            proxy.recintos().getFachade(recinto).getRecinto().getZonas().get(index).getAsientos().remove(asiento);
+        }
+    }
+
+    public void editarAsiento(Recinto recinto,Zona zona,Asiento asiento,Asiento nuevoAsiento){
+        int index = proxy.recintos().getFachade(recinto).getzonas().indexOf(zona);
+        if (index != 0) {
+            int indexAsiento = proxy.recintos().getFachade(recinto).getAsientos(zona).indexOf(asiento);
+            proxy.recintos().getFachade(recinto).getAsientos(zona).set(indexAsiento,nuevoAsiento);
+        }
+    }
 
     public void agregarAsiento(Recinto recinto, Zona zona, Asiento nuevoAsiento) {
         proxy.recintos().getFachade(recinto).getAsientos(zona).add(nuevoAsiento);

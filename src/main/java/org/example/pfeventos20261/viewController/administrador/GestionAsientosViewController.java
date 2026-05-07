@@ -18,10 +18,11 @@ import org.example.pfeventos20261.model.logisticaEvento.Zona;
 
 
 public class GestionAsientosViewController implements DashBoardInjectable{
+
     private RecintoController recintoController;
     private DashboardAdminViewController dashboard;
 
-
+    @FXML private ComboBox<EstadoAsiento> cbAsientoTipo;
     @FXML private ComboBox<Recinto> cbRecintoDestino;
     @FXML private ComboBox<TipoZona> cbTipoZona;
     @FXML private TextField txtIdZona, txtNombreZona, txtPrecioBase, txtZonaX, txtZonaY;
@@ -33,6 +34,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
     private Zona zonaSeleccionada;
     private Asiento asientoSeleccionado;
     private TipoZona tipoZonaSeleccionada;
+    private EstadoAsiento estadoAsiento;
 
     @FXML
     void initialize() {
@@ -60,9 +62,11 @@ public class GestionAsientosViewController implements DashBoardInjectable{
     }
     @FXML
     public void onEditarAsiento(ActionEvent actionEvent) {
+        editarAsiento();
     }
     @FXML
     public void onEliminarAsiento(ActionEvent actionEvent) {
+        eliminarAsiento();
     }
 
     private void initView() {
@@ -88,12 +92,20 @@ public class GestionAsientosViewController implements DashBoardInjectable{
 
         cbTipoZona.setItems(FXCollections.observableArrayList(TipoZona.values()));
 
+        //adecuar para que sea solo bloq y disponible
+        cbAsientoTipo.setItems(FXCollections.observableArrayList(EstadoAsiento.values()));
+
+
     }
 
     private void initListeners() {
         cbTipoZona.valueProperty().addListener((obs, oldValue, newValue) -> {
             tipoZonaSeleccionada = newValue;
             System.out.println("Seleccion actual: " + tipoZonaSeleccionada);
+        });
+        cbAsientoTipo.valueProperty().addListener((obs, oldValue, newValue) -> {
+            estadoAsiento = newValue;
+            System.out.println("Seleccion actual: " + estadoAsiento);
         });
         cbRecintoDestino.valueProperty().addListener((obs, oldValue, newValue) -> {
             recintoActual = newValue;
@@ -141,7 +153,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
                             Integer.parseInt(txtZonaY.getText())
                     )
             );
-            recintoController.agregarZona(recintoActual, zona);
+            recintoController.editarZona(recintoActual,zonaSeleccionada,zona);
             zonaSeleccionada = zona;
             lblZonaActual.setText(zona.getNombre());
         } catch (Exception e) {
@@ -164,6 +176,43 @@ public class GestionAsientosViewController implements DashBoardInjectable{
         refrescarGrid();
         limpiarCamposZona();
     }
+    private void editarAsiento(){
+        if (asientoSeleccionado == null) return;
+        try {
+            Asiento asiento = new Asiento(
+                    "AS-" + txtNumeroAsiento.getText(),
+                    Integer.parseInt(txtNumeroAsiento.getText()),
+                    new ParMutable(
+                            Integer.parseInt(txtAsientoX.getText()),
+                            Integer.parseInt(txtAsientoY.getText())
+                    ),
+                    estadoAsiento
+            );
+            recintoController.editarAsiento(recintoActual,zonaSeleccionada,asientoSeleccionado,asiento);
+
+//            lblZonaActual.setText(asiento.getNombre());
+
+        } catch (Exception e) {
+            mostrarAlerta("error", "datos de zona invalidos");
+            return;
+        }
+        refrescarGrid();
+        limpiarCamposZona();
+    }
+    private void eliminarAsiento(){
+        if (asientoSeleccionado == null) return;
+        try {
+            recintoController.eliminarAsiento(recintoActual,zonaSeleccionada,asientoSeleccionado);
+            zonaSeleccionada = null;
+//            lblZonaActual.setText();
+        } catch (Exception e) {
+            mostrarAlerta("error", "datos de zona invalidos");
+            return;
+        }
+        refrescarGrid();
+        limpiarCamposZona();
+    }
+
 
 
     private void guardarAsiento(){
@@ -179,7 +228,7 @@ public class GestionAsientosViewController implements DashBoardInjectable{
                             Integer.parseInt(txtAsientoX.getText()),
                             Integer.parseInt(txtAsientoY.getText())
                     ),
-                    EstadoAsiento.DISPONIBLE
+                    estadoAsiento
             );
             recintoController.agregarAsiento(recintoActual, zonaSeleccionada, asiento);
         } catch (Exception e) {
@@ -217,6 +266,10 @@ public class GestionAsientosViewController implements DashBoardInjectable{
                     gridZona.add(btnAsiento,
                             a.getPosicion().getX() - 1,
                             a.getPosicion().getY() - 1);
+                    btnAsiento.setOnAction(e -> {
+                        seleccionarAsiento(a,z);
+                        seleccionarZona(z);
+                    });
                 }
             }
             VBox contenedorZona = new VBox(btnZona, gridZona);

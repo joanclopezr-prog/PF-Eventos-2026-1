@@ -13,7 +13,9 @@ import org.example.pfeventos20261.controller.logisticaEvento.RecintoController;
 import org.example.pfeventos20261.model.enums.EstadoAsiento;
 import org.example.pfeventos20261.model.logisticaEvento.Asiento;
 import org.example.pfeventos20261.model.logisticaEvento.Recinto;
+import org.example.pfeventos20261.model.logisticaEvento.Zona;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IncidenciasViewController implements DashBoardInjectable{
@@ -31,9 +33,8 @@ public class IncidenciasViewController implements DashBoardInjectable{
     @FXML
     public void initialize() {
         recintoController = new RecintoController(App.proxy);
-        cargarAsientos();
-        initView();
         initListeners();
+        initView();
     }
 
     private void initListeners() {
@@ -41,29 +42,13 @@ public class IncidenciasViewController implements DashBoardInjectable{
             recintoSeleccionado = newValue;
             System.out.println("Seleccion actual: " + recintoSeleccionado);
             if (recintoSeleccionado != null){
+                asientos = getAsientosRecinto(recintoSeleccionado);
                 refrescarGrid();
             }
         });
     }
-    private void cargarAsientos() {
-        if (recintoSeleccionado == null) return ;
-        recintos = FXCollections.observableArrayList(recintoController.getRecintos());
-    }
 
     private void refrescarGrid() {
-
-    }
-
-    private void initView() {
-        cbRecinto.setItems(FXCollections.observableArrayList(App.proxy.recintos().getAll()));
-        cbRecinto.setCellFactory(lv -> new ListCell<Recinto>() {
-            @Override
-            protected void updateItem(Recinto recinto, boolean empty) {
-                super.updateItem(recinto, empty);
-                setText(empty || recinto == null ? null : recinto.getNombre() + " (" + recinto.getIdRecinto() + ")");
-            }
-        });
-
         if (asientos != null ) {
             if (!asientos.isEmpty()) {
                 pieChart.getData().addAll(
@@ -74,19 +59,43 @@ public class IncidenciasViewController implements DashBoardInjectable{
                 );
             }
         }
-        XYChart.Series<String, Number> serie1 = new XYChart.Series<>();
-        serie1.setName("Evento 1");
-        serie1.getData().add(new XYChart.Data<>("zona vip", 50));
-        serie1.getData().add(new XYChart.Data<>("zona preferencial", 80));
-        serie1.getData().add(new XYChart.Data<>("zona general", 30));
+        for (Zona z : recintoSeleccionado.getZonas()) {
+            XYChart.Series<String, Number> serie = new XYChart.Series<>();
+            serie.setName(z.getNombre());
+            int disponibles = contarAsientosPorEstado(z.getAsientos(), EstadoAsiento.DISPONIBLE);
+            int reservados  = contarAsientosPorEstado(z.getAsientos(), EstadoAsiento.RESERVADO);
+            int vendidos    = contarAsientosPorEstado(z.getAsientos(), EstadoAsiento.VENDIDO);
+            int bloqueados  = contarAsientosPorEstado(z.getAsientos(), EstadoAsiento.BLOQUEADO);
+            serie.getData().add(new XYChart.Data<>("Disponibles", disponibles));
+            serie.getData().add(new XYChart.Data<>("Reservados", reservados));
+            serie.getData().add(new XYChart.Data<>("Vendidos", vendidos));
+            serie.getData().add(new XYChart.Data<>("Bloqueados", bloqueados));
 
-        XYChart.Series<String, Number> serie2 = new XYChart.Series<>();
-        serie2.setName("Evento 2");
-        serie2.getData().add(new XYChart.Data<>("Enero", 40));
-        serie2.getData().add(new XYChart.Data<>("Febrero", 60));
-        serie2.getData().add(new XYChart.Data<>("Marzo", 90));
+            stackedBarChart.getData().add(serie);
+        }
 
-        stackedBarChart.getData().addAll(serie1, serie2);
+    }
+    private int contarAsientosPorEstado(List<Asiento> asientos, EstadoAsiento estado) {
+        if (asientos == null) return 0;
+        int count = 0;
+        for (Asiento a : asientos) {
+            if (a.getEstado() == estado) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+    private void initView() {
+        cbRecinto.setItems(FXCollections.observableArrayList(App.proxy.recintos().getAll()));
+        cbRecinto.setCellFactory(lv -> new ListCell<Recinto>() {
+            @Override
+            protected void updateItem(Recinto recinto, boolean empty) {
+                super.updateItem(recinto, empty);
+                setText(empty || recinto == null ? null : recinto.getNombre() + " (" + recinto.getIdRecinto() + ")");
+            }
+        });
     }
 
     private int calculateValueAsiento(List<Asiento> asientos, EstadoAsiento estadoAsiento){
@@ -98,6 +107,14 @@ public class IncidenciasViewController implements DashBoardInjectable{
         }
         return count;
     }
+    private List<Asiento> getAsientosRecinto(Recinto recinto){
+        List<Asiento> asietosResinto = new ArrayList<>();
+        for (Zona z : recinto.getZonas()){
+            asietosResinto.addAll(z.getAsientos());
+        }
+        return asietosResinto;
+    }
+
 
     @Override
     public void setDashboardController(DashboardAdminViewController dashboardController) {
