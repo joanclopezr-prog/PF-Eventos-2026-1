@@ -7,12 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.pfeventos20261.App;
-import org.example.pfeventos20261.viewController.administrador.DashBoardInjectable;
+import org.example.pfeventos20261.controller.logisticaEvento.UsuarioController;
 
 import java.io.IOException;
 
 public class logginViewController {
-
+    UsuarioController usuarioController;
     @FXML
     private TextField txtCorreo;
     @FXML
@@ -24,6 +24,7 @@ public class logginViewController {
 
     @FXML
     private void initialize() {
+        usuarioController = new UsuarioController(App.proxy);
         btnLogin.setOnAction(event -> iniciarSesion());
         linkRegistro.setOnAction(event -> irARegistro());
     }
@@ -32,7 +33,6 @@ public class logginViewController {
         String correo = txtCorreo.getText();
         String password = txtPassword.getText();
 
-        // Validaciones básicas
         if (correo == null || correo.isEmpty()) {
             mostrarAlerta("Debe ingresar un correo electrónico.");
             return;
@@ -42,12 +42,12 @@ public class logginViewController {
             return;
         }
 
-        // Aquí iría la lógica de autenticación contra tu backend/proxy
-        if (correo.equals("admin@correo.com") && password.equals("1234")) {
-            mostrarAlerta("Inicio de sesión como ADMIN exitoso.");
-        } else {
-            mostrarAlerta("Inicio de sesión exitoso.");
-        }
+//        if (correo.equals(usuarioController.getUsuario().getNombre()) && password.equals(usuarioController.getUsuario().getContrasena())) {
+//
+//            mostrarAlerta("Inicio de sesión exitoso como"+ usuarioController.getUsuario().getNombre());
+//        } else {
+//            mostrarAlerta("Inicio de sesión exitoso.");
+//        }
     }
 
     private void irARegistro() {

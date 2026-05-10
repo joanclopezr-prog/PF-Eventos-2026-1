@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1" prefWidth="400" prefHeight="550"
-      style="-fx-background-color: #f4f4f4;"
-      fx:controller="org.example.pfeventos20261.viewController.loggin.crearCuentaViewController">
+<VBox alignment="CENTER" prefHeight="550" prefWidth="400" spacing="20.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.pfeventos20261.viewController.loggin.crearCuentaViewController">
 
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <VBox spacing="10" alignment="CENTER"
-          style="-fx-background-color: white; -fx-padding: 30;
-                 -fx-background-radius: 10;
-                 -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-padding: 30;                  -fx-background-radius: 10;                  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
 
         <!-- Título -->
-        <Text text="Crear Cuenta"
-              style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #2c3e50;"/>
+        <Text style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #2c3e50;" text="Crear Cuenta" />
 
         <Separator prefWidth="200.0" />
-
-        <!-- Correo -->
-        <Label text="Correo Electrónico" maxWidth="Infinity"/>
-        <TextField fx:id="txtCorreo" promptText="ejemplo@correo.com" />
 
         <!-- Contraseña -->
-        <Label text="Contraseña" maxWidth="Infinity"/>
-        <PasswordField fx:id="txtPassword" promptText="Ingrese su contraseña" />
+        <Label maxWidth="Infinity" text="nombre" />
+        <PasswordField fx:id="txtNombre" promptText="Ingrese su nombre" />
+      <Label layoutX="40.0" layoutY="96.0" maxWidth="Infinity" text="telefono" />
+      <PasswordField fx:id="txtTelefono" layoutX="40.0" layoutY="124.0" promptText="Ingrese su telefono" />
+
+        <!-- Correo -->
+        <Label maxWidth="Infinity" text="Correo Electrónico" />
+        <TextField fx:id="txtCorreo" promptText="ejemplo@correo.com" />
 
         <!-- Confirmar Contraseña -->
-        <Label text="Confirmar Contraseña" maxWidth="Infinity"/>
-        <PasswordField fx:id="txtConfirmPassword" promptText="Repita su contraseña" />
+        <Label maxWidth="Infinity" text="Contraseña" />
+        <PasswordField fx:id="txtPassword" promptText="ingrese su contraseña" />
 
         <Separator prefWidth="200.0" />
 
-        <!-- Apartado Admin -->
-        <Label text="Código de Administrador (opcional)" maxWidth="Infinity"/>
-        <TextField fx:id="txtAdminCode" promptText="Ingrese código para cuenta admin" />
-
-        <!-- Botón Crear -->
-        <Button fx:id="btnCrearCuenta" text="Crear Cuenta"
-                style="-fx-background-color: #2c3e50; -fx-text-fill: white;
-                       -fx-font-weight: bold; -fx-background-radius: 5;"
-                prefWidth="200"/>
+              <!-- Botón Crear -->
+        <Button fx:id="btnCrearCuenta" prefHeight="26.0" prefWidth="172.0" style="-fx-background-color: #2c3e50; -fx-text-fill: white;                        -fx-font-weight: bold; -fx-background-radius: 5;" text="Crear Cuenta" />
+      <HBox prefHeight="70.0" prefWidth="300.0">
+         <children>
+            <VBox prefHeight="100.0" prefWidth="359.0">
+               <children>
+                    <Label maxWidth="Infinity" prefHeight="31.0" prefWidth="56.0" text="codigo de administrador" wrapText="true" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="Infinity" prefHeight="50.0" prefWidth="184.0" text="solo en caso de crear cuenta administrativa" textAlignment="CENTER" textFill="#847f7f" wrapText="true" />
+               </children>
+            </VBox>
+              <TextField fx:id="txtAdminCode" prefHeight="26.0" prefWidth="370.0" promptText="Ingrese código admin" />
+         </children>
+         <effect>
+            <Blend mode="EXCLUSION" opacity="0.17" />
+         </effect>
+      </HBox>
     </VBox>
 </VBox>
