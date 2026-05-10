@@ -4,6 +4,8 @@ import org.example.pfeventos20261.model.Cache;
 import org.example.pfeventos20261.model.usuario.Persona;
 import org.example.pfeventos20261.model.usuario.Usuario;
 
+import java.util.List;
+
 public class UsuarioController {
     private Cache proxy;
 
@@ -11,12 +13,12 @@ public class UsuarioController {
         this.proxy = proxy;
     }
 
-    public void setUsuario(Usuario usuario){
-        proxy.setUsuario(usuario);
+    public void setPersona(Persona persona){
+        proxy.usuario().add(persona);
     }
 
-    public Persona getUsuario(Persona persona){
-        return proxy.getUsuario();
+    public List<Persona> getUsuario(){
+        return proxy.usuario().getAll();
     }
 
 }

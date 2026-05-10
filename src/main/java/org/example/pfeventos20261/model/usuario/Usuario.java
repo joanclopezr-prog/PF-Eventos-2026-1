@@ -8,8 +8,8 @@ public class Usuario extends Persona{
     private String telefono;
     private List<String> metodosPago;
 
-    public Usuario(String id, String nombre, String correo,String telefono) {
-        super(id,nombre);
+    public Usuario(String id, String nombre,String contrasena, String correo,String telefono) {
+        super(id,nombre,contrasena);
         this.correo = correo;
         this.telefono = telefono;
         this.metodosPago = new ArrayList<>();

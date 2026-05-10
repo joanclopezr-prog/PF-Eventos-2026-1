@@ -4,6 +4,7 @@ module org.example.pfeventos20261 {
     requires javafx.graphics;
     requires java.desktop;
     requires javafx.base;
+    opens org.example.pfeventos20261.viewController.loggin to javafx.fxml;
     opens org.example.pfeventos20261 to javafx.fxml;
     opens org.example.pfeventos20261.viewController.administrador to javafx.fxml;
 

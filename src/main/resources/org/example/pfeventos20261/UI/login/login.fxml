@@ -9,7 +9,6 @@
       xmlns:fx="http://javafx.com/fxml/1" prefWidth="400" prefHeight="500"
       style="-fx-background-color: #f4f4f4;"
       fx:controller="org.example.pfeventos20261.viewController.loggin.logginViewController">
-
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>

@@ -3,10 +3,20 @@ package org.example.pfeventos20261.model.usuario;
 public class Persona {
     private String id;
     private String nombre;
+    private String contrasena;
 
-    public Persona(String id, String nombre) {
+    public Persona(String id, String nombre,String contrasena) {
+        this.contrasena = contrasena;
         this.id = id;
         this.nombre = nombre;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getId() {
@@ -21,7 +31,7 @@ public class Persona {
         return nombre;
     }
 
-    public void setNombreCompleto(String nombre) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
